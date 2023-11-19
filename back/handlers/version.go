@@ -1,8 +1,8 @@
-package handler
+package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pgossa/wakfu-stuffer/type/wakfuType"
+	"github.com/pgossa/wakfu-stuffer/types/wakfuTypes"
 )
 
 type version struct {
@@ -17,5 +17,5 @@ func GetVersion(c *gin.Context) (any, error) {
 }
 
 func GetWVersion(c *gin.Context) (any, error) {
-	return wakfuType.WVersionData, nil
+	return wakfuTypes.WVersionData, nil
 }

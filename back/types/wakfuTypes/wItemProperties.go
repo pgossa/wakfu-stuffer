@@ -1,4 +1,4 @@
-package wakfuType
+package wakfuTypes
 
 var WItemPropertiesData []WItemProperties
 

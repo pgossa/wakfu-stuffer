@@ -1,4 +1,4 @@
-package customType
+package customTypes
 
 var CustomItemsData []CustomItem
 

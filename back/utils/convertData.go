@@ -5,16 +5,16 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/pgossa/wakfu-stuffer/type/customType"
-	"github.com/pgossa/wakfu-stuffer/type/wakfuType"
+	"github.com/pgossa/wakfu-stuffer/types/customTypes"
+	"github.com/pgossa/wakfu-stuffer/types/wakfuTypes"
 	"golang.org/x/exp/slices"
 )
 
 var multipleEffectsId = []int{1068, 1069, 1083, 1084, 832, 39, 40}
 
 func ConvertItemListToCustomType() error {
-	var resItemList []customType.CustomItem
-	for _, item := range wakfuType.WItemData {
+	var resItemList []customTypes.CustomItem
+	for _, item := range wakfuTypes.WItemData {
 		resItem, err := convertItem(item)
 		if err != nil {
 			log.Println("Error while converting item: ", item.Definition.Item.Id)
@@ -24,12 +24,12 @@ func ConvertItemListToCustomType() error {
 			resItemList = append(resItemList, resItem)
 		}
 	}
-	customType.CustomItemsData = resItemList
+	customTypes.CustomItemsData = resItemList
 	return nil
 }
 
-func convertItem(wItem wakfuType.WItem) (customType.CustomItem, error) {
-	resItem := customType.CustomItem{}
+func convertItem(wItem wakfuTypes.WItem) (customTypes.CustomItem, error) {
+	resItem := customTypes.CustomItem{}
 	convDefault(wItem, &resItem)
 	convEquipmentPosition(wItem, &resItem)
 	convTD(wItem, &resItem)
@@ -39,27 +39,27 @@ func convertItem(wItem wakfuType.WItem) (customType.CustomItem, error) {
 	return resItem, nil
 }
 
-func convDefault(wItem wakfuType.WItem, cItem *customType.CustomItem) error {
-	if !reflect.DeepEqual(wItem.Definition.Item, wakfuType.ItemItem{}) {
+func convDefault(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) error {
+	if !reflect.DeepEqual(wItem.Definition.Item, wakfuTypes.ItemItem{}) {
 		if wItem.Definition.Item.Id != 0 {
 			cItem.Id = wItem.Definition.Item.Id
 		}
 		cItem.Level = wItem.Definition.Item.Level
 		cItem.Rarity = wItem.Definition.Item.BaseParameters.Rarity
 	} else {
-		return errors.New("SUUU")
+		return errors.New("SUUU") //TODO: oops
 	}
 	return nil
 }
 
-func convTD(wItem wakfuType.WItem, cItem *customType.CustomItem) {
-	if (wItem.Title != wakfuType.Title{}) {
+func convTD(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
+	if (wItem.Title != wakfuTypes.Title{}) {
 		cItem.Title.Fr = wItem.Title.Fr
 		cItem.Title.En = wItem.Title.En
 		cItem.Title.Es = wItem.Title.Es
 		cItem.Title.Pt = wItem.Title.Pt
 	}
-	if (wItem.Description != wakfuType.Description{}) {
+	if (wItem.Description != wakfuTypes.Description{}) {
 		cItem.Description.Fr = wItem.Description.Fr
 		cItem.Description.En = wItem.Description.En
 		cItem.Description.Es = wItem.Description.Es
@@ -67,8 +67,8 @@ func convTD(wItem wakfuType.WItem, cItem *customType.CustomItem) {
 	}
 }
 
-func convSecondarySpecs(wItem wakfuType.WItem, cItem *customType.CustomItem) {
-	if !reflect.DeepEqual(wItem.Definition.Item.BaseParameters, wakfuType.BaseParameters{}) {
+func convSecondarySpecs(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
+	if !reflect.DeepEqual(wItem.Definition.Item.BaseParameters, wakfuTypes.BaseParameters{}) {
 		cItem.SecondarySpecs.AccountBindType = wItem.Definition.Item.BaseParameters.BindType
 		cItem.SecondarySpecs.SetId = wItem.Definition.Item.BaseParameters.ItemSetId
 		cItem.SecondarySpecs.MinimumShardSlotNumber = wItem.Definition.Item.BaseParameters.MinimumShardSlotNumber
@@ -76,14 +76,14 @@ func convSecondarySpecs(wItem wakfuType.WItem, cItem *customType.CustomItem) {
 	}
 }
 
-func convUsage(wItem wakfuType.WItem, cItem *customType.CustomItem) {
+func convUsage(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
 	convUsageUseParameters(wItem, cItem)
 	cItem.Usage.UseEffects = convEffects(wItem.Definition.UseEffects)
 	cItem.Usage.UseCriticalEffects = convEffects(wItem.Definition.UseCriticalEffects)
 }
 
-func convUsageUseParameters(wItem wakfuType.WItem, cItem *customType.CustomItem) {
-	if !reflect.DeepEqual(wItem.Definition.Item.UseParameters, wakfuType.UseParameters{}) {
+func convUsageUseParameters(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
+	if !reflect.DeepEqual(wItem.Definition.Item.UseParameters, wakfuTypes.UseParameters{}) {
 		cItem.Usage.UseParameters.AP = wItem.Definition.Item.UseParameters.UseCostAp
 		cItem.Usage.UseParameters.MP = wItem.Definition.Item.UseParameters.UseCostMp
 		cItem.Usage.UseParameters.WP = wItem.Definition.Item.UseParameters.UseCostWp
@@ -97,19 +97,16 @@ func convUsageUseParameters(wItem wakfuType.WItem, cItem *customType.CustomItem)
 	}
 }
 
-func convEffects(wEffects []wakfuType.Effect) []customType.Effect {
-	var resEffects []customType.Effect
+func convEffects(wEffects []wakfuTypes.Effect) []customTypes.Effect {
+	var resEffects []customTypes.Effect
 	for _, wEffect := range wEffects {
-		// log.Println(wEffect)
-		// log.Println(wEffect)
 		resEffects = append(resEffects, convEffect(wEffect))
-
 	}
 	return resEffects
 }
 
-func convEffect(wEffect wakfuType.Effect) customType.Effect {
-	resEffect := customType.Effect{
+func convEffect(wEffect wakfuTypes.Effect) customTypes.Effect {
+	resEffect := customTypes.Effect{
 		Description: getEffectDescription(wEffect.Effect.Definition.ActionId),
 		ActionId:    wEffect.Effect.Definition.ActionId,
 	}
@@ -128,14 +125,14 @@ func convEffect(wEffect wakfuType.Effect) customType.Effect {
 	return resEffect
 }
 
-func convEquipmentPosition(wItem wakfuType.WItem, cItem *customType.CustomItem) {
+func convEquipmentPosition(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
 	cItem.ItemTypeId = wItem.Definition.Item.BaseParameters.ItemTypeId
 	convEquipmentType(wItem, cItem)
 
 }
 
-func convEquipmentType(wItem wakfuType.WItem, cItem *customType.CustomItem) {
-	for _, wType := range wakfuType.WItemTypesData {
+func convEquipmentType(wItem wakfuTypes.WItem, cItem *customTypes.CustomItem) {
+	for _, wType := range wakfuTypes.WItemTypesData {
 		if wItem.Definition.Item.BaseParameters.ItemTypeId == wType.Definition.Id {
 			cItem.EquipmentPosition.Title = getTypeTitle(wType)
 			cItem.EquipmentPosition.Position, cItem.EquipmentPosition.PositionDisabled = getEquipmentPosition(wType)
@@ -143,19 +140,19 @@ func convEquipmentType(wItem wakfuType.WItem, cItem *customType.CustomItem) {
 	}
 }
 
-func getTypeTitle(wType wakfuType.WItemTypes) customType.MultiLang {
-	return customType.MultiLang(wType.Title)
+func getTypeTitle(wType wakfuTypes.WItemTypes) customTypes.MultiLang {
+	return customTypes.MultiLang(wType.Title)
 }
 
-func getEquipmentPosition(wType wakfuType.WItemTypes) ([]string, []string) {
+func getEquipmentPosition(wType wakfuTypes.WItemTypes) ([]string, []string) {
 	return wType.Definition.EquipmentPositions, wType.Definition.EquipmentDisabledPositions
 }
 
-func getEffectDescription(actionId int) customType.MultiLang {
-	for _, action := range wakfuType.WActionData {
+func getEffectDescription(actionId int) customTypes.MultiLang {
+	for _, action := range wakfuTypes.WActionData {
 		if actionId == action.Definition.Id {
-			return customType.MultiLang(action.Description)
+			return customTypes.MultiLang(action.Description)
 		}
 	}
-	return customType.MultiLang{}
+	return customTypes.MultiLang{}
 }

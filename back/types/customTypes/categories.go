@@ -1,18 +1,26 @@
-package customType
+package customTypes
 
+//TODO: Init Id or delte them
 var Equipments Equipment
 var Consumables Consumable
 var Resources Resource
 var HavenBags HavenBag
 var Miscellanies Miscellaneous
 var Cosmetics Cosmetic
+var Mounts []CustomItem
+var Pets []CustomItem
 var QuestItems []CustomItem
 var NotSorted []CustomItem
 
 type Consumable struct {
-	Id            int //106
-	Food          []CustomItem
-	Teleportation []CustomItem
+	Id             int //106
+	Foods          Food
+	Teleportations []CustomItem
+}
+
+type Food struct {
+	Id    int // 745
+	Foods []CustomItem
 }
 
 type Equipment struct {
@@ -26,12 +34,12 @@ type Equipment struct {
 
 type WeaponsAndShield struct {
 	Id          int // 100
-	OHWeapons   OHWeapon
+	MHWeapons   MHWeapon
 	THWeapons   THWeapon
 	OffHWeapons OffHWeapon
 }
 
-type OHWeapon struct {
+type MHWeapon struct {
 	Id         int //518
 	Wands      []CustomItem
 	Swords     []CustomItem
@@ -69,13 +77,13 @@ type Armor struct {
 }
 
 type Accessory struct {
-	id      int //521
+	Id      int //521
 	Tools   []CustomItem
 	Emblems []CustomItem
 }
 
 type Resource struct {
-	id                     int //226
+	Id                     int //226
 	MonsterResources       []CustomItem
 	Improvements           Improvement
 	Kamas                  []CustomItem
@@ -88,7 +96,7 @@ type Resource struct {
 }
 
 type Improvement struct {
-	id                 int //602
+	Id                 int //602
 	Transmutations     []CustomItem
 	Enchantments       []CustomItem
 	SublimationScrolls []CustomItem
@@ -97,12 +105,17 @@ type Improvement struct {
 type Crop struct {
 	Id                 int // 758
 	MinerHarvests      []CustomItem
-	TrapperHarvests    []CustomItem
+	TrapperHarvests    TrapperHarvest
 	LumberjackHarvests []CustomItem
 	FishermanHarvests  []CustomItem
 	FarmerHarvests     []CustomItem
 	HerbalistHarvests  []CustomItem
 	VariedCrops        []CustomItem
+}
+
+type TrapperHarvest struct {
+	Ìd    int //282
+	Seeds []CustomItem
 }
 
 type RefinementsComponent struct {
@@ -139,7 +152,15 @@ type DisplayWindowsWorkshop struct {
 
 type HavenBagDecoration struct {
 	Id         int //535
-	Furnitures []CustomItem
+	Furnitures Furniture
+}
+
+type Furniture struct {
+	Id                    int //297
+	HavenBagFurnitures    []CustomItem
+	HavenBagDecorations   []CustomItem
+	TradeRoomDecorations  []CustomItem
+	GardenRoomDecorations []CustomItem
 }
 
 type Miscellaneous struct {

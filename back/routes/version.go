@@ -2,11 +2,11 @@ package routes
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pgossa/wakfu-stuffer/handler"
+	"github.com/pgossa/wakfu-stuffer/handlers"
 )
 
-func ApiAddRoutes(rg *gin.RouterGroup) {
+func AddVersionRoutes(rg *gin.RouterGroup) {
 	config := rg.Group("/")
-	config.GET("/version", handler.StructWrapper(handler.GetVersion))
-	config.GET("/Wversion", handler.StructWrapper(handler.GetWVersion))
+	config.GET("/version", handlers.StructWrapper(handlers.GetVersion))
+	config.GET("/Wversion", handlers.StructWrapper(handlers.GetWVersion))
 }

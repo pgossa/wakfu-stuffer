@@ -6,11 +6,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/pgossa/wakfu-stuffer/type/wakfuType"
+	"github.com/pgossa/wakfu-stuffer/types/wakfuTypes"
 )
 
 func CheckForNewVersion() {
-	log.Println(wakfuType.WVersionData.Version)
+	log.Println(wakfuTypes.WVersionData.Version)
 	newVersion, err := retrieveVersion()
 	if err != nil {
 		log.Println("The data may not be up to date, error while fetching wakfu API: ", err)
@@ -30,20 +30,25 @@ func CheckForNewVersion() {
 		if err = SortData(); err != nil {
 			log.Println("Error while sorting the data:", err)
 		}
+		log.Println("Data successfully sorted!")
 	}
 }
 
-func isANewVersion(newVersion *wakfuType.WVersion) bool {
-	return (*newVersion != wakfuType.WVersionData)
+func isANewVersion(newVersion *wakfuTypes.WVersion) bool {
+	return (*newVersion != wakfuTypes.WVersionData)
 }
 
-func setNewVersion(newVersion *wakfuType.WVersion) {
-	wakfuType.WVersionData = *newVersion
+func setNewVersion(newVersion *wakfuTypes.WVersion) {
+	wakfuTypes.WVersionData = *newVersion
 }
 
-func retrieveVersion() (*wakfuType.WVersion, error) {
-	var version wakfuType.WVersion
+func retrieveVersion() (*wakfuTypes.WVersion, error) {
+	var version wakfuTypes.WVersion
 	body, err := fetchData("https://wakfu.cdn.ankama.com/gamedata/config.json")
+	if err != nil {
+		log.Println("Error while getting the version")
+		return nil, err
+	}
 	err = json.Unmarshal(body, &version)
 	if err != nil {
 		log.Println("error:", err)
@@ -57,28 +62,32 @@ func retrieveAndSetNewData() error {
 	if err != nil {
 		return err
 	}
-	wakfuType.WItemData = items
+	wakfuTypes.WItemData = items
 	actions, err := retrieveActions()
 	if err != nil {
 		return err
 	}
-	wakfuType.WActionData = actions
+	wakfuTypes.WActionData = actions
 	itemProperties, err := retrieveItemProperties()
 	if err != nil {
 		return err
 	}
-	wakfuType.WItemPropertiesData = itemProperties
+	wakfuTypes.WItemPropertiesData = itemProperties
 	itemTypes, err := retrieveItemTypes()
 	if err != nil {
 		return err
 	}
-	wakfuType.WItemTypesData = itemTypes
+	wakfuTypes.WItemTypesData = itemTypes
 	return nil
 }
 
-func retrieveItems() ([]wakfuType.WItem, error) {
-	var items []wakfuType.WItem
+func retrieveItems() ([]wakfuTypes.WItem, error) {
+	var items []wakfuTypes.WItem
 	body, err := fetchData(createUrl("items"))
+	if err != nil {
+		log.Println("Error while getting the items")
+		return nil, err
+	}
 	err = json.Unmarshal(body, &items)
 	if err != nil {
 		log.Println("error:", err)
@@ -87,9 +96,13 @@ func retrieveItems() ([]wakfuType.WItem, error) {
 	return items, err
 }
 
-func retrieveActions() ([]wakfuType.WAction, error) {
-	var actions []wakfuType.WAction
+func retrieveActions() ([]wakfuTypes.WAction, error) {
+	var actions []wakfuTypes.WAction
 	body, err := fetchData(createUrl("actions"))
+	if err != nil {
+		log.Println("Error while getting the actions")
+		return nil, err
+	}
 	err = json.Unmarshal(body, &actions)
 	if err != nil {
 		log.Println("error:", err)
@@ -98,9 +111,13 @@ func retrieveActions() ([]wakfuType.WAction, error) {
 	return actions, err
 }
 
-func retrieveItemProperties() ([]wakfuType.WItemProperties, error) {
-	var itemProperties []wakfuType.WItemProperties
+func retrieveItemProperties() ([]wakfuTypes.WItemProperties, error) {
+	var itemProperties []wakfuTypes.WItemProperties
 	body, err := fetchData(createUrl("itemProperties"))
+	if err != nil {
+		log.Println("Error while getting the itemProperties")
+		return nil, err
+	}
 	err = json.Unmarshal(body, &itemProperties)
 	if err != nil {
 		log.Println("error:", err)
@@ -109,9 +126,13 @@ func retrieveItemProperties() ([]wakfuType.WItemProperties, error) {
 	return itemProperties, err
 }
 
-func retrieveItemTypes() ([]wakfuType.WItemTypes, error) {
-	var itemTypes []wakfuType.WItemTypes
+func retrieveItemTypes() ([]wakfuTypes.WItemTypes, error) {
+	var itemTypes []wakfuTypes.WItemTypes
 	body, err := fetchData(createUrl("itemTypes"))
+	if err != nil {
+		log.Println("Error while getting the itemTypes")
+		return nil, err
+	}
 	err = json.Unmarshal(body, &itemTypes)
 	if err != nil {
 		log.Println("error:", err)
@@ -137,5 +158,5 @@ func fetchData(url string) ([]byte, error) {
 
 func createUrl(path string) string {
 	baseUrl := "https://wakfu.cdn.ankama.com/gamedata/"
-	return baseUrl + wakfuType.WVersionData.Version + "/" + path + ".json"
+	return baseUrl + wakfuTypes.WVersionData.Version + "/" + path + ".json"
 }

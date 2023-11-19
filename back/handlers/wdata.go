@@ -1,22 +1,22 @@
-package handler
+package handlers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pgossa/wakfu-stuffer/type/wakfuType"
+	"github.com/pgossa/wakfu-stuffer/types/wakfuTypes"
 )
 
 func GetWItems(c *gin.Context) (any, error) {
-	return wakfuType.WItemData, nil
+	return wakfuTypes.WItemData, nil
 }
 
 func GetWActions(c *gin.Context) (any, error) {
-	return wakfuType.WActionData, nil
+	return wakfuTypes.WActionData, nil
 }
 
 func GetWItemProperties(c *gin.Context) (any, error) {
-	return wakfuType.WItemPropertiesData, nil
+	return wakfuTypes.WItemPropertiesData, nil
 }
 
 func GetWItemTypes(c *gin.Context) (any, error) {
-	return wakfuType.WItemTypesData, nil
+	return wakfuTypes.WItemTypesData, nil
 }
