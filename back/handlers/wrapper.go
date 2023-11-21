@@ -8,6 +8,8 @@ import (
 
 func StructWrapper(f func(c *gin.Context) (any, error)) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		c.Header("Access-Control-Allow-Origin", "http://localhost:5173")
+		c.Header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS")
 		body, err := f(c)
 		if err != nil {
 			c.JSON(503, gin.H{"status": err})

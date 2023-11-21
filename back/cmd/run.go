@@ -4,6 +4,7 @@ import (
 	"log"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-co-op/gocron"
 	customRouter "github.com/pgossa/wakfu-stuffer/router"
@@ -19,6 +20,14 @@ func Run() {
 		log.Fatal(err)
 	}
 	s.StartAsync()
+	// TODO: MODIFY THIS IS FOR TESTING PURPOSE ONLY
+	r.Use(cors.New(cors.Config{
+		AllowAllOrigins: true,
+		// AllowOrigins:    []string{"http://localhost:5173"},
+		AllowMethods:  []string{"POST", "PUT", "PATCH"},
+		AllowHeaders:  []string{"*"},
+		ExposeHeaders: []string{"Content-Length"},
+	}))
 	v1 := r.Group("/v1")
 	customRouter.InitRoutes(v1)
 	r.Run(":5000")
