@@ -15,7 +15,7 @@ type ItemHeuristic struct {
 	Item      customTypes.CustomItem
 }
 
-func FilterEquipementsByRarity(equipmentList []customTypes.CustomItem, rarity string) []customTypes.CustomItem {
+func FilterEquipmentsByRarity(equipmentList []customTypes.CustomItem, rarity string) []customTypes.CustomItem {
 	resList := []customTypes.CustomItem{}
 	for _, equipment := range equipmentList {
 		if equipment.Rarity == types.Rarity.GetRarityByName(rarity) {
@@ -53,6 +53,32 @@ func removeTooHighLevelItemsFromList(itemList []customTypes.CustomItem, level in
 	return resList
 }
 
+func getAndRemoveRelicItems(itemList []customTypes.CustomItem) ([]customTypes.CustomItem, []customTypes.CustomItem) {
+	resList := []customTypes.CustomItem{}
+	relicList := []customTypes.CustomItem{}
+	for _, item := range itemList {
+		if item.Rarity == types.Rarity.Relic {
+			relicList = append(relicList, item)
+		} else {
+			resList = append(resList, item)
+		}
+	}
+	return resList, relicList
+}
+
+func getAndRemoveEpicItems(itemList []customTypes.CustomItem) ([]customTypes.CustomItem, []customTypes.CustomItem) {
+	resList := []customTypes.CustomItem{}
+	epicList := []customTypes.CustomItem{}
+	for _, item := range itemList {
+		if item.Rarity == types.Rarity.Epic {
+			epicList = append(epicList, item)
+		} else {
+			resList = append(resList, item)
+		}
+	}
+	return resList, epicList
+}
+
 func CalculateBuildHeuristic(build buildTypes.Build, request types.RequestRanking) float64 {
 	heuristicSum := float64(0)
 	for _, item := range build.GetBuildItem() {
@@ -76,14 +102,13 @@ func GetBetterHeuristicItems(request types.RequestRanking, itemList []customType
 	if loopItemList != nil &&
 		loopItemList[0].Item.EquipmentPosition.Position != nil &&
 		loopItemList[0].Item.EquipmentPosition.Position[0] == "FIRST_WEAPON" {
-		for i := 0; i < itemNumber/2; i++ {
-			if loopItemList[i].Item.EquipmentPosition.PositionDisabled == nil {
+		for i := 0; i < itemNumber/2; i++ { // Add One handed weapons
+			if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) == 0 {
 				itemList = append(itemList, loopItemList[i].Item)
 			}
 		}
-		for i := 0; i < itemNumber/2; i++ {
-			itemList = append(itemList, loopItemList[i].Item)
-			if loopItemList[i].Item.EquipmentPosition.PositionDisabled != nil &&
+		for i := 0; i < itemNumber/2; i++ { // Add Two handed weapons
+			if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) > 0 &&
 				loopItemList[i].Item.EquipmentPosition.PositionDisabled[0] == "SECOND_WEAPON" {
 				itemList = append(itemList, loopItemList[i].Item)
 			}
@@ -99,6 +124,9 @@ func GetBetterHeuristicItems(request types.RequestRanking, itemList []customType
 func calculateHeuristicForBetterItem(item customTypes.CustomItem, request types.RequestRanking) float64 {
 	heuristicSum := float64(0)
 	for _, effect := range item.EquipEffects {
+		if item.Title.En == "Valkyr Helmet" {
+			log.Println(effect.Description.En, calculateEffectHeuristic(effect, request))
+		}
 		heuristicSum += calculateEffectHeuristic(effect, request)
 	}
 	return heuristicSum
@@ -361,33 +389,33 @@ func calculateEffectHeuristic(effect customTypes.Effect, request types.RequestRa
 			maxElemNumber := 0
 			maxElemName := ""
 			if !slices.Contains(elemDoneList, "Fire") {
-				if maxElemNumber < request.WeightSpec.ElementaryDamages.Fire {
-					maxElemNumber = request.WeightSpec.ElementaryDamages.Fire
+				if maxElemNumber < request.WeightSpec.ElementaryDamages.FireWeight {
+					maxElemNumber = request.WeightSpec.ElementaryDamages.FireWeight
 					maxElemName = "Fire"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Earth") {
-				if maxElemNumber < request.WeightSpec.ElementaryDamages.Earth {
-					maxElemNumber = request.WeightSpec.ElementaryDamages.Earth
+				if maxElemNumber < request.WeightSpec.ElementaryDamages.EarthWeight {
+					maxElemNumber = request.WeightSpec.ElementaryDamages.EarthWeight
 					maxElemName = "Earth"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Water") {
-				if maxElemNumber < request.WeightSpec.ElementaryDamages.Water {
-					maxElemNumber = request.WeightSpec.ElementaryDamages.Water
+				if maxElemNumber < request.WeightSpec.ElementaryDamages.WaterWeight {
+					maxElemNumber = request.WeightSpec.ElementaryDamages.WaterWeight
 					maxElemName = "Water"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Air") {
-				if maxElemNumber < request.WeightSpec.ElementaryDamages.Air {
-					maxElemNumber = request.WeightSpec.ElementaryDamages.Air
+				if maxElemNumber < request.WeightSpec.ElementaryDamages.AirWeight {
+					maxElemNumber = request.WeightSpec.ElementaryDamages.AirWeight
 					maxElemName = "Air"
 				}
 			}
 			elemDoneList = append(elemDoneList, maxElemName)
 			sumHeuristic += calculateEffectHeuristic(customTypes.Effect{
 				ActionId: elemMaitriseNameToActionId(maxElemName),
-				Quantity: float64(maxElemNumber),
+				Quantity: effect.Quantity,
 			}, request)
 		}
 		return sumHeuristic
@@ -399,33 +427,33 @@ func calculateEffectHeuristic(effect customTypes.Effect, request types.RequestRa
 			maxElemNumber := 0
 			maxElemName := ""
 			if !slices.Contains(elemDoneList, "Fire") {
-				if maxElemNumber < request.WeightSpec.ElementaryResistances.Fire {
-					maxElemNumber = request.WeightSpec.ElementaryResistances.Fire
+				if maxElemNumber < request.WeightSpec.ElementaryResistances.FireWeight {
+					maxElemNumber = request.WeightSpec.ElementaryResistances.FireWeight
 					maxElemName = "Fire"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Earth") {
-				if maxElemNumber < request.WeightSpec.ElementaryResistances.Earth {
-					maxElemNumber = request.WeightSpec.ElementaryResistances.Earth
+				if maxElemNumber < request.WeightSpec.ElementaryResistances.EarthWeight {
+					maxElemNumber = request.WeightSpec.ElementaryResistances.EarthWeight
 					maxElemName = "Earth"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Water") {
-				if maxElemNumber < request.WeightSpec.ElementaryResistances.Water {
-					maxElemNumber = request.WeightSpec.ElementaryResistances.Water
+				if maxElemNumber < request.WeightSpec.ElementaryResistances.WaterWeight {
+					maxElemNumber = request.WeightSpec.ElementaryResistances.WaterWeight
 					maxElemName = "Water"
 				}
 			}
 			if !slices.Contains(elemDoneList, "Air") {
-				if maxElemNumber < request.WeightSpec.ElementaryResistances.Air {
-					maxElemNumber = request.WeightSpec.ElementaryResistances.Air
+				if maxElemNumber < request.WeightSpec.ElementaryResistances.AirWeight {
+					maxElemNumber = request.WeightSpec.ElementaryResistances.AirWeight
 					maxElemName = "Air"
 				}
 			}
 			elemDoneList = append(elemDoneList, maxElemName)
 			sumHeuristic += calculateEffectHeuristic(customTypes.Effect{
 				ActionId: elemResiNameToActionId(maxElemName),
-				Quantity: float64(maxElemNumber),
+				Quantity: effect.Quantity,
 			}, request)
 		}
 		return sumHeuristic
@@ -450,7 +478,7 @@ func elemMaitriseNameToActionId(elemMaitriseName string) int {
 	case "Air":
 		return 125
 	default:
-		log.Println("Elem maitrise name not found")
+		log.Println("Elem mastery name not found")
 		return 0
 	}
 }
@@ -466,7 +494,7 @@ func elemResiNameToActionId(elemMaitriseName string) int {
 	case "Air":
 		return 85
 	default:
-		log.Println("Elem maitrise name not found")
+		log.Println("Elem mastery name not found")
 		return 0
 	}
 }
