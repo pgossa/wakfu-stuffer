@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"io"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/pgossa/wakfu-stuffer/ranking"
@@ -20,15 +19,7 @@ func GetBetterBuild(c *gin.Context) (any, error) {
 	if err != nil {
 		return "", err
 	}
-	build := ranking.GetBetterBuild(requestRanking)
+	// return requestRanking, nil
+	build := ranking.WeightRankBuild(requestRanking)
 	return build, nil
-}
-
-func GetLevelItems(c *gin.Context) (any, error) {
-	level, err := strconv.Atoi(c.Param("level"))
-	if err != nil {
-		return nil, err
-	}
-	requestRanking := types.RequestRanking{Level: level}
-	return ranking.GetBetterBuild(requestRanking), nil
 }

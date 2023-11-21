@@ -1,46 +1,82 @@
 Example requestBody:
 ```json
 {
-  "Level": 0,
-  "WeightSpec": {
-    "HP": 100,
-    "AP": 0,
-    "MP": 100,
-    "WP": 100,
-    "PO": 100,
-    "ArmorGiven": 10,
-    "ArmorReceived": 10,
-    "ElementaryDamages": {
-      "Fire": 10,
-      "Earth": 10,
-      "Water": 10,
-      "Air": 10
-    },
-    "ElementaryResistances": {
-      "Fire": 10,
-      "Earth": 10,
-      "Water": 10,
-      "Air": 10
-    },
-    "CriticalChance": 10,
-    "Block": 10,
-    "Initiative": 10,
-    "Dodge": 10,
-    "Lock": 10,
-    "Prospecting": 0,
-    "Wisdom": 0,
-    "Control": 10,
-    "Will": 10,
-    "MCritical": 10,
-    "RCritical": 10,
-    "MBack": 10,
-    "RBack": 10,
-    "MMeler": 10,
-    "MDistance": 10,
-    "MHeal": 10,
-    "MBerzerk": 10
-  },
-  "ForbiddenItems": [],
-  "MandatoryItems": []
+   "Level":25,
+   "WeightSpec":{
+      "HP":500,
+      "HPWeight":1,
+      "AP":3,
+      "APWeight":10,
+      "MP":0,
+      "MPWeight":0,
+      "WP":0,
+      "WPWeight":0,
+      "PO":0,
+      "POWeight":0,
+      "ArmorGiven":0,
+      "ArmorGivenWeight":0,
+      "ArmorReceived":0,
+      "ArmorReceivedWeight":0,
+      "ElementaryDamages":{
+         "Fire":0,
+         "FireWeight":0,
+         "Earth":30,
+         "EarthWeight":2,
+         "Water":30,
+         "WaterWeight":2,
+         "Air":13,
+         "AirWeight":2
+      },
+      "ElementaryResistances":{
+         "Fire":10,
+         "FireWeight":2,
+         "Earth":10,
+         "EarthWeight":2,
+         "Water":10,
+         "WaterWeight":2,
+         "Air":10,
+         "AirWeight":2
+      },
+      "CriticalChance":10,
+      "CriticalChanceWeight":1,
+      "Block":0,
+      "BlockWeight":0,
+      "Initiative":0,
+      "InitiativeWeight":0,
+      "Dodge":10,
+      "DodgeWeight":1,
+      "Lock":0,
+      "LockWeight":0,
+      "Prospecting":0,
+      "ProspectingWeight":0,
+      "Wisdom":0,
+      "WisdomWeight":0,
+      "Control":0,
+      "ControlWeight":0,
+      "Will":0,
+      "WillWeight":0,
+      "MCritical":0,
+      "MCriticalWeight":0,
+      "RCritical":0,
+      "RCriticalWeight":0,
+      "MBack":0,
+      "MBackWeight":0,
+      "RBack":0,
+      "RBackWeight":0,
+      "MMelee":20,
+      "MMeleeWeight":3,
+      "MDistance":0,
+      "MDistanceWeight":0,
+      "MHeal":0,
+      "MHealWeight":0,
+      "MBerzerk":0,
+      "MBerzerkWeight":0
+   },
+   "ForbiddenItems":[
+      
+   ],
+   "MandatoryItems":[
+      
+   ]
 }
 ```

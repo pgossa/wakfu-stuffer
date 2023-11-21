@@ -15,7 +15,7 @@ type Build struct {
 	Mount        customTypes.CustomItem
 	FirstWeapon  customTypes.CustomItem
 	SecondWeapon customTypes.CustomItem
-	Emblem       customTypes.CustomItem
+	Accessory    customTypes.CustomItem
 	Pet          customTypes.CustomItem
 }
 
@@ -33,7 +33,7 @@ func (build Build) GetBuildItem() []customTypes.CustomItem {
 	resList = append(resList, build.Mount)
 	resList = append(resList, build.FirstWeapon)
 	resList = append(resList, build.SecondWeapon)
-	resList = append(resList, build.Emblem)
+	resList = append(resList, build.Accessory)
 	resList = append(resList, build.Pet)
 	return resList
 }

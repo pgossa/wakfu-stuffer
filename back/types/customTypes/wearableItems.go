@@ -1,8 +1,8 @@
 package customTypes
 
-var EquipableItemsData EquipableItems
+var WearableItemsData WearableItems
 
-type EquipableItems struct {
+type WearableItems struct {
 	Equipments EquipmentByPosition
 	Mounts     []CustomItem
 	Pets       []CustomItem

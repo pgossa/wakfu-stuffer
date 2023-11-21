@@ -8,11 +8,11 @@ func SortData() error {
 	for _, item := range customTypes.CustomItemsData {
 		sortItem(item)
 	}
-	sortEquipableItems()
+	sortWearableItems()
 	return nil
 }
 
-// Disclaimer: Done this with chatGPT so there may be issues (not on equipable stuff for sure)
+// Disclaimer: Done this with chatGPT so there may be issues (not on Wearable stuff for sure)
 // TODO: Issue with haven bag decoration (six instance dk why: gg ankama)
 // TODO: Same for consumable
 func sortItem(item customTypes.CustomItem) { // May be good to do it with a map instead but it seems less readable
@@ -164,8 +164,8 @@ func sortItem(item customTypes.CustomItem) { // May be good to do it with a map 
 	}
 }
 
-func sortEquipableItems() {
-	equipableItems := customTypes.EquipableItems{
+func sortWearableItems() {
+	wearableItems := customTypes.WearableItems{
 		Equipments: customTypes.EquipmentByPosition{
 			Head:         customTypes.Equipments.Armors.Helmets,
 			Shoulder:     customTypes.Equipments.Armors.Epaulettes,
@@ -182,7 +182,7 @@ func sortEquipableItems() {
 		Mounts: customTypes.Mounts,
 		Pets:   customTypes.Pets,
 	}
-	customTypes.EquipableItemsData = equipableItems
+	customTypes.WearableItemsData = wearableItems
 }
 
 func appendMHWeaponsAndTHWeapons() []customTypes.CustomItem {
