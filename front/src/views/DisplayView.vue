@@ -5,14 +5,11 @@ import Request from '../services/request'
 import { ref, onMounted } from 'vue'
 
 const buildStore = useBuildStore()
-const build = ref("")
+const build = buildStore.getBuild
 const buildBuild = ref({} as Build)
-build.value = buildStore.getBuild
-await Request.getBuild(build.value).then((res) => {
-  console.log(res)
-  let buildBuild = res
-  console.log(buildBuild)
-})
+console.log("0000000000000000000000")
+console.log(build)
+buildBuild.value = await Request.post<Build>("http://localhost:5000/v1/api/build/weightRanking", build)
 </script>
 
 <template>
