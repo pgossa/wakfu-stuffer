@@ -1,18 +1,19 @@
 import type { Item } from "./itemType"
 
 export type Build = {
-  helmet: Item;
-  amulet: Item;
-  breastplate: Item;
-  leftHand: Item;
-  rightHand: Item;
-  boots: Item;
-  epaulettes: Item;
-  belt: Item;
-  firstWeapon: Item;
-  secondWeapon: Item;
-  accessory: Item;
-  mount: Item;
-  pet: Item;
+  Helmet: Item;
+  Amulet: Item;
+  Breastplate: Item;
+  LeftHand: Item;
+  RightHand: Item;
+  Boots: Item;
+  Epaulettes: Item;
+  Cloak: Item;
+  Belt: Item;
+  FirstWeapon: Item;
+  SecondWeapon: Item;
+  Accessory: Item;
+  Mount: Item;
+  Pet: Item;
 }
 

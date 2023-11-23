@@ -1,60 +1,60 @@
 export type Item = {
-  title: MultiLang;
-  description: MultiLang;
-  id: number;
-  level: number;
-  rarity: number;
-  itemTypeId: number;
-  equipmentPosition: EquipmentPosition;
-  secondarySpecs: SecondarySpecs;
-  usage: Usage
-  equipEffects: Effect[]
+  Title: MultiLang;
+  Description: MultiLang;
+  Id: number;
+  Level: number;
+  Rarity: number;
+  ItemTypeId: number;
+  EquipmentPosition: EquipmentPosition;
+  SecondarySpecs: SecondarySpecs;
+  Usage: Usage
+  EquipEffects: Effect[]
 }
 
 export type MultiLang = {
-  fr: string;
-  en: string;
-  es: string;
-  pt: string;
+  Fr: string;
+  En: string;
+  Es: string;
+  Pt: string;
 }
 
 export type EquipmentPosition = {
-  title: MultiLang;
-  position: string[]
-  positionDisabled: string[]
+  Title: MultiLang;
+  Position: string[]
+  PositionDisabled: string[]
 }
 
 export type SecondarySpecs = {
-  accountBindType: number;
-  setId: number;
-  minimumShardSlotNumber: number;
-  maximumShardSlotNumber: number;
+  AccountBindType: number;
+  SetId: number;
+  MinimumShardSlotNumber: number;
+  MaximumShardSlotNumber: number;
 }
 
 export type Usage = {
-  useParameters: UseParameters;
-  useEffects: Effect[]
-  useCriticalEffects: boolean;
+  UseParameters: UseParameters;
+  UseEffects: Effect[]
+  UseCriticalEffects: boolean;
 }
 
 export type UseParameters = {
-  ap: number;
-  mp: number;
-  wp: number;
-  minRange: number;
-  maxRange: number;
-  onFreeCell: boolean;
-  onLos: boolean;
-  onlyLine: boolean;
-  noBorderCell: boolean;
-  useWorldTarget: boolean;
+  AP: number;
+  MP: number;
+  WP: number;
+  MinRange: number;
+  MaxRange: number;
+  OnFreeCell: boolean;
+  OnLos: boolean;
+  OnlyLine: boolean;
+  NoBorderCell: boolean;
+  UseWorldTarget: boolean;
 }
 
 export type Effect = {
-  description: MultiLang;
-  actionId: number;
-  quantity: number;
-  number: number;
-  areaShape: number;
-  areaSize: number[];
+  Description: MultiLang;
+  ActionId: number;
+  Quantity: number;
+  Number: number;
+  AreaShape: number;
+  AreaSize: number[];
 }

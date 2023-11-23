@@ -1,4 +1,6 @@
 import type { Build } from "@/types/buildType";
+import { assertEquals } from 'typia'
+
 export default class Request {
   constructor() {
     
@@ -8,16 +10,14 @@ export default class Request {
     "Content-Type": "application/json",
   }
 
-  static async post<T>(url: string, body: string): Promise<T> {
-    console.log("11111111111111111111")
-    console.log(body)
+  static async post<Build>(url: string, body: string): Promise<Build> {
     const res = await fetch(url, {
       method: "POST",
       headers: this.headers,
       body: body,
     })
     if(!res.ok) throw new Error(res.statusText)
-    return (await res.json() as T)
+    return (await res.json() as Build)
     }
 
   static async get(body: string): Promise<Build> {
@@ -26,6 +26,6 @@ export default class Request {
       headers: this.headers
     })
     if(!res.ok) throw new Error(res.statusText)
-    return (await res.json() as Build)
+    return await res.json()
   }
 }

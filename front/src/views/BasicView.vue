@@ -1,20 +1,22 @@
 <script setup lang="ts">
 import router from '@/router';
 import Request from '../services/request'
+import type { Build } from '@/types/buildType'
 import { useBuildStore } from '@/stores/build';
+import { ref } from 'vue'
+import { FwbSpinner } from 'flowbite-vue'
 
 const buildStore = useBuildStore()
+const isRedirected = ref(false) 
 
-// async function getBasicBuild(){
-//   Request.getBuild(fakeGenerateBody()).then((res) => {
-//     buildStore.setBuild(res)
-//     router.push({ name: 'display'})
-//   })
-// }
 async function getBasicBuild(){
-  buildStore.setBuild(fakeGenerateBody())
+  isRedirected.value = true
+  const build: Build = await Request.post<Build>("http://localhost:5000/v1/api/build/weightRanking", fakeGenerateBody())
+  console.log(build)
+  buildStore.setBuild(build)
   router.push({ name: 'display'})
 }
+
 function fakeGenerateBody(): string {
   return `{
    "Level":230,
@@ -99,6 +101,14 @@ function fakeGenerateBody(): string {
 </script>
 
 <template>
-  <button @click="getBasicBuild">Click me(Basic)</button>
+  <div v-if="! isRedirected">
+    <button @click="getBasicBuild">Click me(Basic)</button>
+  </div>
+  <div v-else>
+    <p>Searching best build...</p>
+    <div class="flex justify-center">
+      <fwb-spinner size="12" />
+    </div>
+  </div>
 
 </template>

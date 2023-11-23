@@ -4,16 +4,16 @@ import { defineStore } from 'pinia'
 export const useBuildStore = defineStore('build', {
   state: () => {
     return {
-      data: {} as string
+      data: {} as Build
     }
   },
   getters: {
-    getBuild() : string{
+    getBuild() : Build{
       return this.data
     }
   },
   actions: {
-    setBuild(data: string) {
+    setBuild(data: Build) {
       this.data = data
     }
   }
