@@ -1,10 +1,8 @@
-import type { Item } from "./itemType"
-
 export type BuildRequest = {
   level: number;
   weightSpec: WeightSpec;
-  forbiddenItems: Item;
-  mandatoryItems: Item;
+  forbiddenItems: string[];
+  mandatoryItems: string[];
 }
 
 export type WeightSpec = {

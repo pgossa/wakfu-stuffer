@@ -50,7 +50,7 @@ const build: Build = buildStore.getBuild
     <div class="col-start-1 col-span-1">
       <ItemDisplay :item="build.FirstWeapon"/>
     </div>
-    <div v-if="build.SecondWeapon" class="col-start-2 col-span-1">
+    <div v-if="build.SecondWeapon.Id" class="col-start-2 col-span-1">
       <ItemDisplay :item="build.SecondWeapon"/>
     </div>
     <div class="col-start-4 col-span-1">

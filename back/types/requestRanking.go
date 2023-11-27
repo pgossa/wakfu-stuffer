@@ -1,12 +1,10 @@
 package types
 
-import "github.com/pgossa/wakfu-stuffer/types/customTypes"
-
 type RequestRanking struct {
 	Level          int
 	WeightSpec     WeightSpec
-	ForbiddenItems []customTypes.CustomItem
-	MandatoryItems []customTypes.CustomItem
+	ForbiddenItems []string
+	MandatoryItems []string
 }
 
 type WeightSpec struct {
