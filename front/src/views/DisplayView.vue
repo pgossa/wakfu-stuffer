@@ -30,7 +30,7 @@ const build: Build = buildStore.getBuild
     </div>
 
     <div class="col-start-3 col-span-1">
-      <ItemDisplay :item="build.Breastplate"/>
+      <ItemDisplay :item="build.BreastPlate"/>
     </div>
 
     <div class="col-start-1 col-span-1">

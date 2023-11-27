@@ -1,4 +1,28 @@
-import type { Item } from '@/types/itemType'
+import type { Effect, Item } from '@/types/itemType'
+import ap from "../assets/wakfu/ap.png"
+import block from "../assets/wakfu/block.png"
+import cc from "../assets/wakfu/cc.png"
+import control from "../assets/wakfu/control.png"
+import dodge from "../assets/wakfu/dodge.png"
+import hp from "../assets/wakfu/hp.png"
+import ini from "../assets/wakfu/ini.png"
+import lock from "../assets/wakfu/lock.png"
+import mb from "../assets/wakfu/mb.png"
+import mback from "../assets/wakfu/mback.png"
+import mc from "../assets/wakfu/mc.png"
+import md from "../assets/wakfu/md.png"
+import me from "../assets/wakfu/me.png"
+import mh from "../assets/wakfu/mh.png"
+import mm from "../assets/wakfu/mm.png"
+import mp from "../assets/wakfu/mp.png"
+import po from "../assets/wakfu/po.png"
+import rback from "../assets/wakfu/rback.png"
+import re from "../assets/wakfu/re.png"
+import wp from "../assets/wakfu/wp.png"
+import rea from "../assets/wakfu/rea.png"
+import ree from "../assets/wakfu/ree.png"
+import ref from "../assets/wakfu/ref.png"
+import rew from "../assets/wakfu/rew.png"
 
 export default class itemUtils {
   static getImageUrl(item: Item): string {
@@ -34,46 +58,126 @@ export default class itemUtils {
     return "border-gray-950"
   }
 
-  static getIconByEffectId(effectId: number): string {
-    switch (effectId) {
+  static getIconByEffect(effect: Effect): string {
+    switch (effect.ActionId) {
       case 20: // HP
-        return "https://vertylo.github.io/wakassets/aptitudes/50.png"
+        return hp
       case 26: // MHeal
-        return "https://vertylo.github.io/wakassets/aptitudes/136.png"
+        return mh
       case 184: // Control
-        return "https://vertylo.github.io/wakassets/aptitudes/10.png"
+        return control
       case 191: // WP
-        return "https://vertylo.github.io/wakassets/aptitudes/105.png"
+        return wp
       case 150: // CritChance
-        return "https://vertylo.github.io/wakassets/aptitudes/109.png"
+        return cc
       case 80: // Resi elem
-        return "https://vertylo.github.io/wakassets/aptitudes/116.png"
+        return re
+      case 82: //re fire
+        return ref;
+      case 83: //re water
+        return rew;
+      case 84: //re earth
+        return ree;
+      case 85: //re air
+        return rea;
       case 180: // MBack
-        return "https://vertylo.github.io/wakassets/aptitudes/13.png"
+        return mback
       case 175: // Dodge
-        return "https://vertylo.github.io/wakassets/aptitudes/16.png"
+        return dodge
       case 160: // PO
-        return "https://vertylo.github.io/wakassets/aptitudes/17.png"
+        return po
       case 177: // Will
         return "https://vertylo.github.io/wakassets/aptitudes/19.png"
       case 171: // Init
-        return "https://vertylo.github.io/wakassets/aptitudes/19.png"
+        return ini
       case 1052: // MMelee
-        return "https://vertylo.github.io/wakassets/aptitudes/226.png"
+        return mm
       case 1053: // MDistance
-        return "https://vertylo.github.io/wakassets/aptitudes/115.png"
+        return md
       case 875: // Block
-        return "https://vertylo.github.io/wakassets/aptitudes/230.png"
+        return block
       case 173: // Lock
-        return "https://vertylo.github.io/wakassets/aptitudes/121.png"
+        return lock
       case 41: // MP
-        return "https://vertylo.github.io/wakassets/aptitudes/4.png"
-      case 26: // DMGInf
-        return "https://vertylo.github.io/wakassets/aptitudes/52.png"
+        return mp
       case 31: // AP
-        return "https://vertylo.github.io/wakassets/aptitudes/8.png"
+        return ap
+      case 71: // Rback
+        return rback
+      case 181: // Mback
+        return mback
+      case 149: // MCrit
+        return mc
+      case 1061: // mberzerk
+        return mb
+      case 1068: // Me multiple eleme
+        return me
+      case 120: // Me
+        return me 
       default:
+        console.log(effect.ActionId)
         return "https://vertylo.github.io/wakassets/aptitudes/1.png"
+    }
+  }
+  static getDescByEffect(effect: Effect): any {
+    switch (effect.ActionId) {
+      case 20: // HP
+        return "HP"
+      case 26: // MHeal
+        return "Heal masteries"
+      case 184: // Control
+        return "Control"
+      case 191: // WP
+        return "WP"
+      case 150: // CritChance
+        return "% Critical Chance"
+      case 80: // Resi elem
+        return "Elementary resistance"
+      case 82: //re fire
+        return "Fire resistance"
+      case 83: //re water
+        return "Water resistance"
+      case 84: //re earth
+        return "Earth resistance"
+      case 85: //re air
+        return "Air resistance"
+      case 180: // MBack
+        return "Back masteries"
+      case 175: // Dodge
+        return "Dodge"
+      case 160: // PO
+        return "Range"
+      case 177: // Will
+        return "Force of Will"
+      case 171: // Init
+        return "Initiative"
+      case 1052: // MMelee
+        return "Melee masteries"
+      case 1053: // MDistance
+        return "Distance masteries"
+      case 875: // Block
+        return "Block"
+      case 173: // Lock
+        return "Lock"
+      case 41: // MP
+        return "MP"
+      case 31: // AP
+        return "AP"
+      case 71: // Rback
+        return "Back Resistance"
+      case 181: // Mback
+        return "Lose Back Masteries"
+      case 149: // MCrit
+        return "Critical Masteries"
+      case 1061: // mberzerk
+        return "Berzerk masteries"
+      case 1068: // Me multiple eleme
+        return " masteries in " + effect.Number + " elements"
+      case 120: // Me
+        return "Elementary masteries"
+      default:
+        console.log(effect.ActionId)
+        return "Special"
     }
   }
 }

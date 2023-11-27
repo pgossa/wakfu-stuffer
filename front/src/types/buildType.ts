@@ -3,7 +3,7 @@ import type { Item } from "./itemType"
 export type Build = {
   Helmet: Item;
   Amulet: Item;
-  Breastplate: Item;
+  BreastPlate: Item;
   LeftHand: Item;
   RightHand: Item;
   Boots: Item;
