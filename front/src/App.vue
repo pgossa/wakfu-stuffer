@@ -14,12 +14,6 @@ import NavBar from './components/NavBar.vue'
 
 <style scoped>
 main {
-  padding-top: 2rem;
-}
-
-@media (min-width: 1024px) {
-  main {
-    padding-top: 5rem;
-  }
+  padding-top: 4rem;
 }
 </style>

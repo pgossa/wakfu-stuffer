@@ -11,9 +11,9 @@ const props = defineProps({
 </script>
 
 <template>
-  <Popper hover arrow>
+  <Popper  closeDelay="0">
     <div class="flex flex-col justify-center rounded-lg border-4" v-bind:class="itemUtils.getColorByRarity(props.item!)">
-      <!-- <img :src="itemUtils.getImageUrl(props.item!)" :alt="item?.Title.En"> -->
+      <img :src="itemUtils.getImageUrl(props.item!)" class="max-w-xxs">
       <p>{{ props.item?.Title.En }}</p>
     </div>
     <template #content>
@@ -31,3 +31,14 @@ const props = defineProps({
     </template>
   </Popper>
 </template>
+
+<style scoped>
+.max-w-xxs{
+  max-width: 5rem;
+}
+@media(max-width: 1024px) {
+  .max-w-xxs{
+    max-width: 3rem;
+  }
+}
+</style>

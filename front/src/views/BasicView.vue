@@ -5,7 +5,7 @@ import type { Build } from '@/types/buildType'
 import type { BuildRequest } from '@/types/buildRequetsType'
 import buildUtils from '@/services/buildUtils'
 import { useBuildStore } from '@/stores/build'
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import Level from '../components/Level.vue'
 import Restrictions from '../components/Restrictions.vue'
 
@@ -15,14 +15,25 @@ const level = ref(230)
 const mandatoryItems = ref('')
 const forbiddenItems = ref('')
 const statsSelected = ref([''])
+const windowWidth = ref(window.innerWidth)
 
 const updateForbiddenItems = (updatedForbiddenItem: string) => {
   forbiddenItems.value = updatedForbiddenItem
 }
-
 const updateMandatoryItems = (updatedMandatoryItem: string) => {
   mandatoryItems.value = updatedMandatoryItem
 }
+const handleResize = () => {
+  console.log(window.innerWidth)
+  windowWidth.value = window.innerWidth
+}
+
+onMounted(() => {
+    window.addEventListener('resize', handleResize)
+})
+onUnmounted(() => {
+    window.removeEventListener('resize', handleResize)
+})
 
 function toggleStat(stat: string) {
   if (statsSelected.value.includes(stat)) {
@@ -34,7 +45,6 @@ function toggleStat(stat: string) {
 
 const setLevel = (levelInput: number) => {
   level.value = levelInput
-  console.log(level.value)
 }
 
 function clearStats() {
@@ -45,6 +55,8 @@ function clearStats() {
 }
 
 async function getBasicBuild() {
+  console.log(level)
+  console.log(level.value)
   const buildRequest: BuildRequest = buildUtils.createEasyBuildRequestBody(
     level.value,
     statsSelected.value,
@@ -62,8 +74,9 @@ async function getBasicBuild() {
 </script>
 
 <template>
+  <button @click="handleResize">Test</button>
   <div v-if="!isRedirected">
-    <div class="grid grid-rows-4 grid-flow-col justify-center gap-4">
+    <div class="grid grid-rows-4 grid-flow-col justify-center gap-4" :class="{ 'grid-flow-row-dense' : windowWidth < 800 }">
       <div id="modulo" class="row-span-4 flex flex-col">
         <Level @levelEmit="setLevel" />
       </div>
