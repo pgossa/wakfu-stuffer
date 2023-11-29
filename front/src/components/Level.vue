@@ -1,5 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { FwbRange } from 'flowbite-vue'
+import { FwbDropdown, FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import { ref, onMounted, onUnmounted } from 'vue'
 
 const level = ref(230)
@@ -10,282 +11,226 @@ const handleResize = () => {
 }
 onMounted(() => {
   window.addEventListener('resize', handleResize)
-  rangeInput.addEventListener('input', updateCurrencyInput);
 })
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
 
-const changeLevel = (levelInput) => {
+function decLevel() {
+  if (level.value >= 2) {
+    level.value--
+  }
+}
+function incLevel() {
+  if (level.value < 230) {
+    level.value++
+  }
+}
+
+const changeLevel = (levelInput: number) => {
   level.value = levelInput
   emit('levelEmit', level.value)
 }
-
-    // Get the elements
-  var rangeInput = document.getElementById('price-range-input');
-  var currencyInput = document.getElementById('currency-input');
-
-  // Function to update the currency input
-  function updateCurrencyInput() {
-    currencyInput.value = rangeInput.value;
-  }
-
-  // Add event listener to the range input
-  
 </script>
 
 <template>
-  <div v-if="windowWidth > 800" class="row-span-4 flex flex-col">
+  <div v-if="windowWidth > 800" class="row-span-4 flex flex-col space-y-2">
     <label class="mx-auto text-lg underline">Level : {{ level }}</label>
-    <button type="button" @click="changeLevel(20)"
-      class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+    <button
+      type="button"
+      @click="changeLevel(20)"
+      class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+    >
       20
     </button>
-    <button type="button" @click="changeLevel(35)"
-      class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+    <button
+      type="button"
+      @click="changeLevel(35)"
+      class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+    >
       35
     </button>
-    <button type="button" @click="changeLevel(50)"
-      class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+    <button
+      type="button"
+      @click="changeLevel(50)"
+      class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+    >
       50
     </button>
-    <button type="button" @click="changeLevel(65)"
-      class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
+    <button
+      type="button"
+      @click="changeLevel(65)"
+      class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
+    >
       65
     </button>
-    <button type="button" @click="changeLevel(80)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(80)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       80
     </button>
-    <button type="button" @click="changeLevel(95)"
-      class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+    <button
+      type="button"
+      @click="changeLevel(95)"
+      class="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+    >
       95
     </button>
-    <button type="button" @click="changeLevel(110)"
-      class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800">
+    <button
+      type="button"
+      @click="changeLevel(110)"
+      class="text-green-700 hover:text-white border border-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-green-500 dark:text-green-500 dark:hover:text-white dark:hover:bg-green-600 dark:focus:ring-green-800"
+    >
       110
     </button>
-    <button type="button" @click="changeLevel(125)"
-      class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+    <button
+      type="button"
+      @click="changeLevel(125)"
+      class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
+    >
       125
     </button>
-    <button type="button" @click="changeLevel(140)"
-      class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900">
+    <button
+      type="button"
+      @click="changeLevel(140)"
+      class="text-yellow-400 hover:text-white border border-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:outline-none focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-yellow-300 dark:text-yellow-300 dark:hover:text-white dark:hover:bg-yellow-400 dark:focus:ring-yellow-900"
+    >
       140
     </button>
-    <button type="button" @click="changeLevel(155)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(155)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       155
     </button>
-    <button type="button" @click="changeLevel(170)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(170)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       170
     </button>
-    <button type="button" @click="changeLevel(185)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(185)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       185
     </button>
-    <button type="button" @click="changeLevel(200)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(200)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       200
     </button>
-    <button type="button" @click="changeLevel(215)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(215)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       215
     </button>
-    <button type="button" @click="changeLevel(230)"
-      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900">
+    <button
+      type="button"
+      @click="changeLevel(230)"
+      class="text-purple-700 hover:text-white border border-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-purple-400 dark:text-purple-400 dark:hover:text-white dark:hover:bg-purple-500 dark:focus:ring-purple-900"
+    >
       230
     </button>
     <label class="mx-auto">Custom level slider</label>
-    <fwb-range :value="level.value" @input="changeLevel($event.target.value)" :step="1" :max="230" :min="0" label="" />
+    <fwb-range
+      :value="level"
+      @input="changeLevel($event.target.value)"
+      :step="1"
+      :max="230"
+      :min="0"
+      label=""
+    />
   </div>
-  <!-- <div v-else>
+  <div v-else class="flex flex-col items-center space-y-4">
+    <label class="mx-auto text-lg underline">Level : {{ level }}</label>
+    <fwb-range v-model="level" :max="230" :min="1" label="" />
 
-    <form class="max-w-[24rem] mx-auto">
-      <div class="flex mb-4">
-        <button id="dropdown-currency-button" data-dropdown-toggle="dropdown-currency"
-          class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-          type="button">
-          <svg fill="none" aria-hidden="true" class="h-4 w-4 me-2" viewBox="0 0 20 15">
-            <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-            <mask id="a" style="mask-type:luminance" width="20" height="15" x="0" y="0" maskUnits="userSpaceOnUse">
-              <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-            </mask>
-            <g mask="url(#a)">
-              <path fill="#D02F44" fill-rule="evenodd"
-                d="M19.6.5H0v.933h19.6V.5zm0 1.867H0V3.3h19.6v-.933zM0 4.233h19.6v.934H0v-.934zM19.6 6.1H0v.933h19.6V6.1zM0 7.967h19.6V8.9H0v-.933zm19.6 1.866H0v.934h19.6v-.934zM0 11.7h19.6v.933H0V11.7zm19.6 1.867H0v.933h19.6v-.933z"
-                clip-rule="evenodd" />
-              <path fill="#46467F" d="M0 .5h8.4v6.533H0z" />
-              <g filter="url(#filter0_d_343_121520)">
-                <path fill="url(#paint0_linear_343_121520)" fill-rule="evenodd"
-                  d="M1.867 1.9a.467.467 0 11-.934 0 .467.467 0 01.934 0zm1.866 0a.467.467 0 11-.933 0 .467.467 0 01.933 0zm1.4.467a.467.467 0 100-.934.467.467 0 000 .934zM7.467 1.9a.467.467 0 11-.934 0 .467.467 0 01.934 0zM2.333 3.3a.467.467 0 100-.933.467.467 0 000 .933zm2.334-.467a.467.467 0 11-.934 0 .467.467 0 01.934 0zm1.4.467a.467.467 0 100-.933.467.467 0 000 .933zm1.4.467a.467.467 0 11-.934 0 .467.467 0 01.934 0zm-2.334.466a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.466a.467.467 0 11-.933 0 .467.467 0 01.933 0zM1.4 4.233a.467.467 0 100-.933.467.467 0 000 .933zm1.4.467a.467.467 0 11-.933 0 .467.467 0 01.933 0zm1.4.467a.467.467 0 100-.934.467.467 0 000 .934zM6.533 4.7a.467.467 0 11-.933 0 .467.467 0 01.933 0zM7 6.1a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.467a.467.467 0 11-.933 0 .467.467 0 01.933 0zM3.267 6.1a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.467a.467.467 0 11-.934 0 .467.467 0 01.934 0z"
-                  clip-rule="evenodd" />
-              </g>
-            </g>
-            <defs>
-              <linearGradient id="paint0_linear_343_121520" x1=".933" x2=".933" y1="1.433" y2="6.1"
-                gradientUnits="userSpaceOnUse">
-                <stop stop-color="#fff" />
-                <stop offset="1" stop-color="#F0F0F0" />
-              </linearGradient>
-              <filter id="filter0_d_343_121520" width="6.533" height="5.667" x=".933" y="1.433"
-                color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-                <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                <feOffset dy="1" />
-                <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_343_121520" />
-                <feBlend in="SourceGraphic" in2="effect1_dropShadow_343_121520" result="shape" />
-              </filter>
-            </defs>
-          </svg>
-          USD <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 10 6">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="m1 1 4 4 4-4" />
+    <div class="max-w-xs mx-auto">
+      <div class="mx-auto relative flex items-center max-w-[8rem]">
+        <button
+          type="button"
+          id="decrement-button"
+          @click="decLevel"
+          class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+        >
+          <svg
+            class="w-3 h-3 text-gray-900 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 18 2"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M1 1h16"
+            />
           </svg>
         </button>
-        <div id="dropdown-currency"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-36 dark:bg-gray-700">
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdown-currency-button">
-            <li>
-              <button type="button"
-                class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg fill="none" aria-hidden="true" class="h-4 w-4 me-2" viewBox="0 0 20 15">
-                    <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    <mask id="a" style="mask-type:luminance" width="20" height="15" x="0" y="0"
-                      maskUnits="userSpaceOnUse">
-                      <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    </mask>
-                    <g mask="url(#a)">
-                      <path fill="#D02F44" fill-rule="evenodd"
-                        d="M19.6.5H0v.933h19.6V.5zm0 1.867H0V3.3h19.6v-.933zM0 4.233h19.6v.934H0v-.934zM19.6 6.1H0v.933h19.6V6.1zM0 7.967h19.6V8.9H0v-.933zm19.6 1.866H0v.934h19.6v-.934zM0 11.7h19.6v.933H0V11.7zm19.6 1.867H0v.933h19.6v-.933z"
-                        clip-rule="evenodd" />
-                      <path fill="#46467F" d="M0 .5h8.4v6.533H0z" />
-                      <g filter="url(#filter0_d_343_121520)">
-                        <path fill="url(#paint0_linear_343_121520)" fill-rule="evenodd"
-                          d="M1.867 1.9a.467.467 0 11-.934 0 .467.467 0 01.934 0zm1.866 0a.467.467 0 11-.933 0 .467.467 0 01.933 0zm1.4.467a.467.467 0 100-.934.467.467 0 000 .934zM7.467 1.9a.467.467 0 11-.934 0 .467.467 0 01.934 0zM2.333 3.3a.467.467 0 100-.933.467.467 0 000 .933zm2.334-.467a.467.467 0 11-.934 0 .467.467 0 01.934 0zm1.4.467a.467.467 0 100-.933.467.467 0 000 .933zm1.4.467a.467.467 0 11-.934 0 .467.467 0 01.934 0zm-2.334.466a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.466a.467.467 0 11-.933 0 .467.467 0 01.933 0zM1.4 4.233a.467.467 0 100-.933.467.467 0 000 .933zm1.4.467a.467.467 0 11-.933 0 .467.467 0 01.933 0zm1.4.467a.467.467 0 100-.934.467.467 0 000 .934zM6.533 4.7a.467.467 0 11-.933 0 .467.467 0 01.933 0zM7 6.1a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.467a.467.467 0 11-.933 0 .467.467 0 01.933 0zM3.267 6.1a.467.467 0 100-.933.467.467 0 000 .933zm-1.4-.467a.467.467 0 11-.934 0 .467.467 0 01.934 0z"
-                          clip-rule="evenodd" />
-                      </g>
-                    </g>
-                    <defs>
-                      <linearGradient id="paint0_linear_343_121520" x1=".933" x2=".933" y1="1.433" y2="6.1"
-                        gradientUnits="userSpaceOnUse">
-                        <stop stop-color="#fff" />
-                        <stop offset="1" stop-color="#F0F0F0" />
-                      </linearGradient>
-                      <filter id="filter0_d_343_121520" width="6.533" height="5.667" x=".933" y="1.433"
-                        color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
-                        <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                        <feColorMatrix in="SourceAlpha" result="hardAlpha"
-                          values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                        <feOffset dy="1" />
-                        <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.06 0" />
-                        <feBlend in2="BackgroundImageFix" result="effect1_dropShadow_343_121520" />
-                        <feBlend in="SourceGraphic" in2="effect1_dropShadow_343_121520" result="shape" />
-                      </filter>
-                    </defs>
-                  </svg>
-                  USD
-                </div>
-              </button>
-            </li>
-            <li>
-              <button type="button"
-                class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg fill="none" aria-hidden="true" class="h-4 w-4 me-2" viewBox="0 0 20 15">
-                    <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    <mask id="a" style="mask-type:luminance" width="20" height="15" x="0" y="0"
-                      maskUnits="userSpaceOnUse">
-                      <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    </mask>
-                    <g mask="url(#a)">
-                      <path fill="#043CAE" d="M0 .5h19.6v14H0z" />
-                      <path fill="#FFD429" fill-rule="evenodd"
-                        d="M9.14 3.493L9.8 3.3l.66.193-.193-.66.193-.66-.66.194-.66-.194.193.66-.193.66zm0 9.334l.66-.194.66.194-.193-.66.193-.66-.66.193-.66-.193.193.66-.193.66zm5.327-4.86l-.66.193L14 7.5l-.193-.66.66.193.66-.193-.194.66.194.66-.66-.193zm-9.994.193l.66-.193.66.193L5.6 7.5l.193-.66-.66.193-.66-.193.194.66-.194.66zm9.369-2.527l-.66.194.193-.66-.194-.66.66.193.66-.193-.193.66.193.66-.66-.194zm-8.743 4.86l.66-.193.66.193-.194-.66.194-.66-.66.194-.66-.194.193.66-.193.66zm7.034-6.568l-.66.193.194-.66-.194-.66.66.194.66-.193-.193.66.193.66-.66-.194zm-5.326 8.276l.66-.193.66.193-.194-.66.194-.66-.66.194-.66-.193.193.66-.193.66zM13.84 10.3l-.66.193.194-.66-.194-.66.66.194.66-.194-.193.66.193.66-.66-.193zM5.1 5.827l.66-.194.66.194-.194-.66.194-.66-.66.193-.66-.193.193.66-.193.66zm7.034 6.181l-.66.193.194-.66-.194-.66.66.194.66-.193-.193.66.193.66-.66-.194zm-5.326-7.89l.66-.193.66.193-.194-.66.194-.66-.66.194-.66-.193.193.66-.193.66z"
-                        clip-rule="evenodd" />
-                    </g>
-                  </svg>
-                  EUR
-                </div>
-              </button>
-            </li>
-            <li>
-              <button type="button"
-                class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg fill="none" aria-hidden="true" class="h-4 w-4 me-2" viewBox="0 0 20 15">
-                    <rect width="19.1" height="13.5" x=".25" y=".75" fill="#fff" stroke="#F5F5F5" stroke-width=".5"
-                      rx="1.75" />
-                    <mask id="a" style="mask-type:luminance" width="20" height="15" x="0" y="0"
-                      maskUnits="userSpaceOnUse">
-                      <rect width="19.1" height="13.5" x=".25" y=".75" fill="#fff" stroke="#fff" stroke-width=".5"
-                        rx="1.75" />
-                    </mask>
-                    <g fill="#FF3131" mask="url(#a)">
-                      <path d="M14 .5h5.6v14H14z" />
-                      <path fill-rule="evenodd"
-                        d="M0 14.5h5.6V.5H0v14zM11.45 6.784a.307.307 0 01-.518-.277l.268-1.34-.933.466-.467-1.4-.467 1.4-.933-.466.268 1.34a.307.307 0 01-.518.277.307.307 0 00-.434 0l-.25.25-.933-.467L7 7.5l-.231.231a.333.333 0 000 .471l1.164 1.165h1.4l.234 1.4h.466l.234-1.4h1.4l1.164-1.165a.333.333 0 000-.471l-.231-.23.467-.934-.934.466-.25-.25a.307.307 0 00-.433 0z"
-                        clip-rule="evenodd" />
-                    </g>
-                  </svg>
-                  CAD
-                </div>
-              </button>
-            </li>
-            <li>
-              <button type="button"
-                class="inline-flex w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-600 dark:hover:text-white"
-                role="menuitem">
-                <div class="inline-flex items-center">
-                  <svg fill="none" aria-hidden="true" class="h-4 w-4 me-2" viewBox="0 0 20 15">
-                    <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    <mask id="a" style="mask-type:luminance" width="20" height="15" x="0" y="0"
-                      maskUnits="userSpaceOnUse">
-                      <rect width="19.6" height="14" y=".5" fill="#fff" rx="2" />
-                    </mask>
-                    <g mask="url(#a)">
-                      <path fill="#0A17A7" d="M0 .5h19.6v14H0z" />
-                      <path fill="#fff" fill-rule="evenodd"
-                        d="M-.898-.842L7.467 4.8V-.433h4.666V4.8l8.365-5.642L21.542.706l-6.614 4.46H19.6v4.667h-4.672l6.614 4.46-1.044 1.549-8.365-5.642v5.233H7.467V10.2l-8.365 5.642-1.044-1.548 6.614-4.46H0V5.166h4.672L-1.942.706-.898-.842z"
-                        clip-rule="evenodd" />
-                      <path stroke="#DB1F35" stroke-linecap="round" stroke-width=".667"
-                        d="M13.068 4.933L21.933-.9M14.009 10.088l7.948 5.357M5.604 4.917L-2.686-.67M6.503 10.024l-9.19 6.093" />
-                      <path fill="#E6273E" fill-rule="evenodd" d="M0 8.9h8.4v5.6h2.8V8.9h8.4V6.1h-8.4V.5H8.4v5.6H0v2.8z"
-                        clip-rule="evenodd" />
-                    </g>
-                  </svg>
-                  GBP
-                </div>
-              </button>
-            </li>
-          </ul>
-        </div>
-        <label for="currency-input" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Your
-          Email</label>
-        <div class="relative w-full">
-          <input type="number" id="currency-input"
-            class="block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-            placeholder="Enter amount" value="1000" required>
-        </div>
+        <input
+          type="number"
+          v-model="level"
+          id="quantity-input"
+          data-input-counter
+          data-input-counter-min="1"
+          data-input-counter-max="50"
+          aria-describedby="helper-text-explanation"
+          class="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="230"
+          required
+        />
+        <button
+          type="button"
+          id="increment-button"
+          @click="incLevel"
+          class="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
+        >
+          <svg
+            class="w-3 h-3 text-gray-900 dark:text-white"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 18 18"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 1v16M1 9h16"
+            />
+          </svg>
+        </button>
       </div>
-      <div class="relative">
-        <label for="price-range-input" class="sr-only">Default range</label>
-        <input id="price-range-input" type="range" value="1000" min="100" max="1500"
-          class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
-        <span class="text-sm text-gray-500 dark:text-gray-400 absolute start-0 -bottom-6">Min ($100)</span>
-        <span
-          class="text-sm text-gray-500 dark:text-gray-400 absolute start-1/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">$500</span>
-        <span
-          class="text-sm text-gray-500 dark:text-gray-400 absolute start-2/3 -translate-x-1/2 rtl:translate-x-1/2 -bottom-6">$1000</span>
-        <span class="text-sm text-gray-500 dark:text-gray-400 absolute end-0 -bottom-6">Max ($1500)</span>
-      </div>
-    </form>
-  </div> -->
+      <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+        Please select your level from 1 to 230.
+      </p>
+    </div>
+  </div>
 </template>
+
+<style scoped>
+.me-2 {
+  margin-inline-end: 0px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+</style>

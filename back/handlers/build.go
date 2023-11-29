@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/pgossa/wakfu-stuffer/ranking"
 	"github.com/pgossa/wakfu-stuffer/types"
 )
 
@@ -22,7 +21,7 @@ func GetBetterBuild(c *gin.Context) (any, error) {
 		log.Println(err)
 		return "", err
 	}
-	// return requestRanking, nil
-	build := ranking.WeightRankBuild(requestRanking)
-	return build, nil
+	return requestRanking, nil
+	// build := ranking.WeightRankBuild(requestRanking)
+	// return build, nil
 }

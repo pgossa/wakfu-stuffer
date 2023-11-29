@@ -8,13 +8,25 @@ import { useBuildStore } from '@/stores/build'
 import { ref, onMounted, onUnmounted } from 'vue'
 import Level from '../components/Level.vue'
 import Restrictions from '../components/Restrictions.vue'
+import Rarity from '../components/Rarity.vue'
 
 const buildStore = useBuildStore()
 const isRedirected = ref(false)
 const level = ref(230)
 const mandatoryItems = ref('')
 const forbiddenItems = ref('')
-const statsSelected = ref([''])
+const statsSelected = ref([])
+const raritySelected = ref([
+  'Common',
+  'Unusual',
+  'Rare',
+  'Mythical',
+  'Legendary',
+  'Souvenir',
+  'Relic',
+  'Epic'
+])
+
 const windowWidth = ref(window.innerWidth)
 
 const updateForbiddenItems = (updatedForbiddenItem: string) => {
@@ -23,16 +35,20 @@ const updateForbiddenItems = (updatedForbiddenItem: string) => {
 const updateMandatoryItems = (updatedMandatoryItem: string) => {
   mandatoryItems.value = updatedMandatoryItem
 }
+const updateRarity = (updatedRarity: string[]) => {
+  raritySelected.value = updatedRarity
+}
+
 const handleResize = () => {
-  console.log(window.innerWidth)
   windowWidth.value = window.innerWidth
+  console.log(windowWidth.value)
 }
 
 onMounted(() => {
-    window.addEventListener('resize', handleResize)
+  window.addEventListener('resize', handleResize)
 })
 onUnmounted(() => {
-    window.removeEventListener('resize', handleResize)
+  window.removeEventListener('resize', handleResize)
 })
 
 function toggleStat(stat: string) {
@@ -55,13 +71,16 @@ function clearStats() {
 }
 
 async function getBasicBuild() {
-  console.log(level)
-  console.log(level.value)
+  var finalStat: string[] = []
+  for (var stat of statsSelected.value) {
+    finalStat.push(stat)
+  }
   const buildRequest: BuildRequest = buildUtils.createEasyBuildRequestBody(
     level.value,
-    statsSelected.value,
+    finalStat,
     mandatoryItems.value,
-    forbiddenItems.value
+    forbiddenItems.value,
+    raritySelected.value
   )
   isRedirected.value = true
   const build: Build = await Request.post<Build>(
@@ -74,9 +93,11 @@ async function getBasicBuild() {
 </script>
 
 <template>
-  <button @click="handleResize">Test</button>
-  <div v-if="!isRedirected">
-    <div class="grid grid-rows-4 grid-flow-col justify-center gap-4" :class="{ 'grid-flow-row-dense' : windowWidth < 800 }">
+  <div v-if="!isRedirected.value">
+    <div
+      class="grid grid-rows-4 grid-flow-col justify-center"
+      :class="{ 'grid-flow-row-dense': windowWidth < 800, 'space-x-20': windowWidth > 800 }"
+    >
       <div id="modulo" class="row-span-4 flex flex-col">
         <Level @levelEmit="setLevel" />
       </div>
@@ -216,14 +237,18 @@ async function getBasicBuild() {
         </div>
       </div>
 
-      <div id="restrictions" class="row-span-2 flex flex-col space-y-4">
+      <div id="Rarity" class="row-span-1 flex flex-col space-y-4">
+        <Rarity @rarityEmit="updateRarity" />
+      </div>
+
+      <div id="restrictions" class="row-span-1 flex flex-col space-y-4">
         <Restrictions
           @forbiddenItemsEmit="updateForbiddenItems"
           @mandatoryItemsEmit="updateMandatoryItems"
         />
       </div>
 
-      <div id="displayStats" class="row-span-2 flex flex-col mx-auto">
+      <div id="displayStats" class="row-span-1 flex flex-col mx-auto">
         <h1 class="text-lg underline mx-auto">Stats Selected</h1>
         <div v-for="stat in statsSelected" :key="stat" class="mx-auto">
           {{ stat }}

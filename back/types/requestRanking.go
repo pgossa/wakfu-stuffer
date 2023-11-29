@@ -5,6 +5,7 @@ type RequestRanking struct {
 	WeightSpec     WeightSpec
 	ForbiddenItems []string
 	MandatoryItems []string
+	Rarity         []string
 }
 
 type WeightSpec struct {

@@ -1,11 +1,19 @@
-import type { BuildRequest } from "@/types/buildRequetsType"
+import type { BuildRequest } from '@/types/buildRequetsType'
 
 export default class buildUtils {
-  static createEasyBuildRequestBody(level: number, stats: string[], mandatoryItems: string, forbiddenItems: string): BuildRequest {
-    var request: BuildRequest = {
+  static createEasyBuildRequestBody(
+    level: number,
+    stats: string[],
+    mandatoryItems: string,
+    forbiddenItems: string,
+    rarity: string[]
+  ): BuildRequest {
+    console.log(stats)
+    const request: BuildRequest = {
       level: level,
       mandatoryItems: this.parseItems(mandatoryItems),
       forbiddenItems: this.parseItems(forbiddenItems),
+      rarity: rarity,
       weightSpec: {
         HP: 0,
         HPWeight: 0,
@@ -74,18 +82,21 @@ export default class buildUtils {
         MHeal: 0,
         MHealWeight: 0,
         MBerzerk: 0,
-        MBerzerkWeight: 0,
+        MBerzerkWeight: 0
       }
     }
-    for (let stat of stats) {
-      switch(stat) {
-        case "Action Point":
+    for (const stat of stats) {
+      switch (stat) {
+        case 'Action Point':
           request.weightSpec.APWeight = 1
-        case "Movement Point":
+          break
+        case 'Movement Point':
           request.weightSpec.MPWeight = 1
-        case "Wakfu Point":
+          break
+        case 'Wakfu Point':
           request.weightSpec.WPWeight = 1
-        case "Elemental masteries":
+          break
+        case 'Elemental masteries':
           request.weightSpec.ElementaryDamages = {
             FireWeight: 1,
             EarthWeight: 1,
@@ -96,20 +107,27 @@ export default class buildUtils {
             Water: 0,
             Air: 0
           }
-        case "Melee masteries":
+          break
+        case 'Melee masteries':
           request.weightSpec.MMeleeWeight = 1
-        case "Distance masteries":
+          break
+        case 'Distance masteries':
           request.weightSpec.MDistanceWeight = 1
-        case "Rear masteries":
+          break
+        case 'Rear masteries':
           request.weightSpec.RBackWeight = 1
-        case "Critical":
+          break
+        case 'Critical':
           request.weightSpec.CriticalChanceWeight = 1
           request.weightSpec.MCriticalWeight = 1
-        case "Heal masteries":
+          break
+        case 'Heal masteries':
           request.weightSpec.MHealWeight = 1
-        case "Health Points":
+          break
+        case 'Health Points':
           request.weightSpec.HPWeight = 1
-        case "Elemental resistances":
+          break
+        case 'Elemental resistances':
           request.weightSpec.ElementaryResistances = {
             FireWeight: 1,
             EarthWeight: 1,
@@ -120,18 +138,25 @@ export default class buildUtils {
             Water: 0,
             Air: 0
           }
-        case "Block":
+          break
+        case 'Block':
           request.weightSpec.BlockWeight = 1
-        case "Dodge":
+          break
+        case 'Dodge':
           request.weightSpec.DodgeWeight = 1
-        case "Lock":
+          break
+        case 'Lock':
           request.weightSpec.LockWeight = 1
-        case "Initiative":
+          break
+        case 'Initiative':
           request.weightSpec.InitiativeWeight = 1
-        case "Range":
+          break
+        case 'Range':
           request.weightSpec.POWeight = 1
-        case "Control":
+          break
+        case 'Control':
           request.weightSpec.ControlWeight = 1
+          break
       }
     }
     return request
