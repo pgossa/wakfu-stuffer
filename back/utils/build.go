@@ -15,18 +15,50 @@ type ItemHeuristic struct {
 	Item      customTypes.CustomItem
 }
 
-func FilterEquipmentsByRarity(equipmentList []customTypes.CustomItem, rarity string) []customTypes.CustomItem {
+func FilterEquipmentsByRarity(items []customTypes.CustomItem, parameter []string) []customTypes.CustomItem {
+	allowedRaritiesId := getRaritiesIdByNames(parameter)
 	resList := []customTypes.CustomItem{}
-	for _, equipment := range equipmentList {
-		if equipment.Rarity == types.Rarity.GetRarityByName(rarity) {
+	for _, equipment := range items {
+		if slices.Contains(allowedRaritiesId, equipment.Rarity) {
 			resList = append(resList, equipment)
 		}
 	}
 	return resList
 }
 
-func RemoveTooHighLevelItems(level int) customTypes.WearableItems {
-	items := customTypes.WearableItemsData
+func RemoveForbiddenItemByRarity(items customTypes.WearableItems, parameter []string) customTypes.WearableItems {
+	items = iterateOnWearableEquipment(items, func(ci []customTypes.CustomItem, a any) []customTypes.CustomItem {
+		return FilterEquipmentsByRarity(ci, parameter)
+	}, parameter)
+	return items
+}
+
+func getRaritiesIdByNames(rarity []string) []int {
+	resList := []int{}
+	for _, r := range rarity {
+		resList = append(resList, types.Rarity.GetRarityByName(r))
+	}
+	return resList
+}
+
+func iterateOnWearableEquipment(items customTypes.WearableItems, fun func([]customTypes.CustomItem, any) []customTypes.CustomItem, parameter []string) customTypes.WearableItems {
+	items.Equipments.Accessory = fun(items.Equipments.Accessory, parameter)
+	items.Equipments.Back = fun(items.Equipments.Back, parameter)
+	items.Equipments.Belt = fun(items.Equipments.Belt, parameter)
+	items.Equipments.Chest = fun(items.Equipments.Chest, parameter)
+	items.Equipments.Hand = fun(items.Equipments.Hand, parameter)
+	items.Equipments.Head = fun(items.Equipments.Head, parameter)
+	items.Equipments.Legs = fun(items.Equipments.Legs, parameter)
+	items.Equipments.Neck = fun(items.Equipments.Neck, parameter)
+	items.Equipments.Shoulder = fun(items.Equipments.Shoulder, parameter)
+	items.Equipments.FirstWeapon = fun(items.Equipments.FirstWeapon, parameter)
+	items.Equipments.SecondWeapon = fun(items.Equipments.SecondWeapon, parameter)
+	items.Mounts = fun(items.Mounts, parameter)
+	items.Pets = fun(items.Pets, parameter)
+	return items
+}
+
+func RemoveTooHighLevelItems(items customTypes.WearableItems, level int) customTypes.WearableItems {
 	items.Equipments.Accessory = removeTooHighLevelItemsFromList(items.Equipments.Accessory, level)
 	items.Equipments.Back = removeTooHighLevelItemsFromList(items.Equipments.Back, level)
 	items.Equipments.Belt = removeTooHighLevelItemsFromList(items.Equipments.Belt, level)
@@ -331,7 +363,7 @@ func calculateEffectHeuristic(effect customTypes.Effect, request types.RequestRa
 		if request.WeightSpec.WPWeight > 0 {
 			return -effect.Quantity * float64(request.WeightSpec.WPWeight)
 		}
-	case 400: //NullEffect
+	case 400: // NullEffect
 		return 0
 	case 875:
 		if request.WeightSpec.BlockWeight > 0 {
@@ -382,7 +414,7 @@ func calculateEffectHeuristic(effect customTypes.Effect, request types.RequestRa
 			return -effect.Quantity * float64(request.WeightSpec.RBackWeight)
 		}
 	case 1068: // Gain of number in ElementaryMastery
-		//TODO: Better way to do this
+		// TODO: Better way to do this
 		sumHeuristic := float64(0)
 		elemDoneList := []string{}
 		for i := 0; i < int(effect.Number); i++ {
@@ -420,7 +452,7 @@ func calculateEffectHeuristic(effect customTypes.Effect, request types.RequestRa
 		}
 		return sumHeuristic
 	case 1069: // Gain of number in ElementaryResistance
-		//TODO: Better way to do this
+		// TODO: Better way to do this
 		sumHeuristic := float64(0)
 		elemDoneList := []string{}
 		for i := 0; i < int(effect.Number); i++ {

@@ -13,8 +13,10 @@ import (
 // There might be an issue with low number specs (such as AP, MP, ...)
 
 func WeightRankBuild(request types.RequestRanking) buildTypes.Build {
-	itemList := utils.RemoveTooHighLevelItems(request.Level)
-	itemList = getBetterWeightItemsForPositions(request, itemList, 1) //No need to put higher than one
+	itemList := customTypes.WearableItemsData
+	itemList = utils.RemoveTooHighLevelItems(itemList, request.Level)
+	itemList = utils.RemoveForbiddenItemByRarity(itemList, request.Rarity)
+	itemList = getBetterWeightItemsForPositions(request, itemList, 1) // No need to put higher than one
 	return tryEveryCombinationWithWeight(request, itemList)
 }
 
