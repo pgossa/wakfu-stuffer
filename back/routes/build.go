@@ -10,7 +10,7 @@ import (
 // TODO: Add finer routes
 func AddRankingRoutes(rg *gin.RouterGroup) {
 	ranking := rg.Group("/build")
-	ranking.POST("/weightRanking", handlers.StructWrapper(handlers.GetBetterBuild))
+	ranking.POST("/weightRanking", handlers.StructWrapper(handlers.GetBuildByWeight))
 	ranking.POST("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, c.Request.Body)
 	})

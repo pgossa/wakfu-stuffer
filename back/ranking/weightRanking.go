@@ -1,6 +1,8 @@
 package ranking
 
 import (
+	"log"
+
 	"github.com/pgossa/wakfu-stuffer/types"
 	"github.com/pgossa/wakfu-stuffer/types/buildTypes"
 	"github.com/pgossa/wakfu-stuffer/types/customTypes"
@@ -16,6 +18,7 @@ func WeightRankBuild(request types.RequestRanking) buildTypes.Build {
 	itemList := customTypes.WearableItemsData
 	itemList = utils.RemoveTooHighLevelItems(itemList, request.Level)
 	itemList = utils.RemoveForbiddenItemByRarity(itemList, request.Rarity)
+	log.Println(itemList)
 	itemList = getBetterWeightItemsForPositions(request, itemList, 1) // No need to put higher than one
 	return tryEveryCombinationWithWeight(request, itemList)
 }

@@ -24,21 +24,21 @@ type rarity struct {
 
 func (r *rarity) GetRarityByName(rarityName string) int {
 	switch rarityName {
-	case "common":
+	case "Common":
 		return Rarity.Common
-	case "unusual":
+	case "Unusual":
 		return Rarity.Unusual
-	case "rare":
+	case "Rare":
 		return Rarity.Rare
-	case "mythical":
+	case "Mythical":
 		return Rarity.Mythical
-	case "legendary":
+	case "Legendary":
 		return Rarity.Legendary
-	case "relic":
+	case "Relic":
 		return Rarity.Relic
-	case "souvenir":
+	case "Souvenir":
 		return Rarity.Souvenir
-	case "epic":
+	case "Epic":
 		return Rarity.Epic
 	default:
 		return -1

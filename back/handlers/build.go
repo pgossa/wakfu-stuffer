@@ -10,7 +10,7 @@ import (
 	"github.com/pgossa/wakfu-stuffer/types"
 )
 
-func GetBetterBuild(c *gin.Context) (any, error) {
+func GetBuildByWeight(c *gin.Context) (any, error) {
 	jsonData, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Println(err)

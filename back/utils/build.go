@@ -17,12 +17,15 @@ type ItemHeuristic struct {
 
 func FilterEquipmentsByRarity(items []customTypes.CustomItem, parameter []string) []customTypes.CustomItem {
 	allowedRaritiesId := getRaritiesIdByNames(parameter)
+	log.Println(allowedRaritiesId)
 	resList := []customTypes.CustomItem{}
 	for _, equipment := range items {
 		if slices.Contains(allowedRaritiesId, equipment.Rarity) {
 			resList = append(resList, equipment)
 		}
 	}
+	log.Println("inside 1")
+	log.Println(resList)
 	return resList
 }
 
@@ -30,6 +33,8 @@ func RemoveForbiddenItemByRarity(items customTypes.WearableItems, parameter []st
 	items = iterateOnWearableEquipment(items, func(ci []customTypes.CustomItem, a any) []customTypes.CustomItem {
 		return FilterEquipmentsByRarity(ci, parameter)
 	}, parameter)
+	log.Println(items)
+	log.Println("end")
 	return items
 }
 
@@ -131,23 +136,24 @@ func GetBetterHeuristicItems(request types.RequestRanking, itemList []customType
 		itemNumber = len(loopItemList)
 	}
 	itemList = []customTypes.CustomItem{}
-	if loopItemList != nil &&
-		loopItemList[0].Item.EquipmentPosition.Position != nil &&
-		loopItemList[0].Item.EquipmentPosition.Position[0] == "FIRST_WEAPON" {
-		for i := 0; i < itemNumber/2; i++ { // Add One handed weapons
-			if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) == 0 {
+	if len(loopItemList) > 0 {
+		if loopItemList[0].Item.EquipmentPosition.Position != nil &&
+			loopItemList[0].Item.EquipmentPosition.Position[0] == "FIRST_WEAPON" {
+			for i := 0; i < itemNumber/2; i++ { // Add One handed weapons
+				if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) == 0 {
+					itemList = append(itemList, loopItemList[i].Item)
+				}
+			}
+			for i := 0; i < itemNumber/2; i++ { // Add Two handed weapons
+				if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) > 0 &&
+					loopItemList[i].Item.EquipmentPosition.PositionDisabled[0] == "SECOND_WEAPON" {
+					itemList = append(itemList, loopItemList[i].Item)
+				}
+			}
+		} else {
+			for i := 0; i < itemNumber; i++ {
 				itemList = append(itemList, loopItemList[i].Item)
 			}
-		}
-		for i := 0; i < itemNumber/2; i++ { // Add Two handed weapons
-			if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) > 0 &&
-				loopItemList[i].Item.EquipmentPosition.PositionDisabled[0] == "SECOND_WEAPON" {
-				itemList = append(itemList, loopItemList[i].Item)
-			}
-		}
-	} else {
-		for i := 0; i < itemNumber; i++ {
-			itemList = append(itemList, loopItemList[i].Item)
 		}
 	}
 	return itemList
