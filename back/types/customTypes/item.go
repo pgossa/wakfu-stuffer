@@ -1,5 +1,7 @@
 package customTypes
 
+import "fmt"
+
 var CustomItemsData []CustomItem
 
 type SecondarySpecs struct {
@@ -24,7 +26,7 @@ type UseParameters struct {
 	OnFreeCell     bool `bool:"onFreeCell"` // Not used ATM (always false)
 	OnLos          bool `bool:"onLos"`      // DK but used
 	OnlyLine       bool `bool:"onlyLine"`
-	NoBorderCell   bool `bool:"noBorderCell"`  //DK but used
+	NoBorderCell   bool `bool:"noBorderCell"`  // DK but used
 	UseWorldTarget int  `int:"useWorldTarget"` // Not used ATM (always 0)
 }
 
@@ -61,4 +63,13 @@ type CustomItem struct {
 	SecondarySpecs    SecondarySpecs
 	Usage             Usage
 	EquipEffects      []Effect
+}
+
+func (item CustomItem) ToString() string {
+	resString := ""
+	resString += item.Title.En + " "
+	resString += fmt.Sprint(item.Level) + " "
+	resString += fmt.Sprint(item.Rarity) + " "
+	resString += item.EquipmentPosition.Title.En
+	return resString
 }

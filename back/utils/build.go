@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"log"
 	"sort"
 
 	"github.com/pgossa/wakfu-stuffer/types"
@@ -17,15 +16,12 @@ type ItemHeuristic struct {
 
 func FilterEquipmentsByRarity(items []customTypes.CustomItem, parameter []string) []customTypes.CustomItem {
 	allowedRaritiesId := getRaritiesIdByNames(parameter)
-	log.Println(allowedRaritiesId)
 	resList := []customTypes.CustomItem{}
 	for _, equipment := range items {
 		if slices.Contains(allowedRaritiesId, equipment.Rarity) {
 			resList = append(resList, equipment)
 		}
 	}
-	log.Println("inside 1")
-	log.Println(resList)
 	return resList
 }
 
@@ -33,9 +29,33 @@ func RemoveForbiddenItemByRarity(items customTypes.WearableItems, parameter []st
 	items = iterateOnWearableEquipment(items, func(ci []customTypes.CustomItem, a any) []customTypes.CustomItem {
 		return FilterEquipmentsByRarity(ci, parameter)
 	}, parameter)
-	log.Println(items)
-	log.Println("end")
 	return items
+}
+
+func GetBetterAndRemoveRelicAndEpicItems(request types.RequestRanking, items customTypes.WearableItems) (customTypes.WearableItems, customTypes.WearableItems, customTypes.WearableItems) {
+	relicItems := customTypes.WearableItems{}
+	epicItems := customTypes.WearableItems{}
+	if slices.Contains(request.Rarity, "Relic") {
+		items, relicItems = getBetterRelicItems(request, items)
+	}
+	if slices.Contains(request.Rarity, "Epic") {
+		items, epicItems = getBetterEpicItems(request, items)
+	}
+	return items, relicItems, epicItems
+}
+
+func getBetterRelicItems(request types.RequestRanking, items customTypes.WearableItems) (customTypes.WearableItems, customTypes.WearableItems) {
+	items, relicItems := iterateOnWearableEquipmentTwoReturn(items, func(ci []customTypes.CustomItem, a any) ([]customTypes.CustomItem, []customTypes.CustomItem) {
+		return getAndRemoveRarityItems(ci, types.Rarity.Relic)
+	}, types.Rarity.Relic)
+	return items, relicItems
+}
+
+func getBetterEpicItems(request types.RequestRanking, items customTypes.WearableItems) (customTypes.WearableItems, customTypes.WearableItems) {
+	items, epicItems := iterateOnWearableEquipmentTwoReturn(items, func(ci []customTypes.CustomItem, a any) ([]customTypes.CustomItem, []customTypes.CustomItem) {
+		return getAndRemoveRarityItems(ci, types.Rarity.Epic)
+	}, types.Rarity.Epic)
+	return items, epicItems
 }
 
 func getRaritiesIdByNames(rarity []string) []int {
@@ -46,37 +66,45 @@ func getRaritiesIdByNames(rarity []string) []int {
 	return resList
 }
 
-func iterateOnWearableEquipment(items customTypes.WearableItems, fun func([]customTypes.CustomItem, any) []customTypes.CustomItem, parameter []string) customTypes.WearableItems {
-	items.Equipments.Accessory = fun(items.Equipments.Accessory, parameter)
-	items.Equipments.Back = fun(items.Equipments.Back, parameter)
-	items.Equipments.Belt = fun(items.Equipments.Belt, parameter)
-	items.Equipments.Chest = fun(items.Equipments.Chest, parameter)
-	items.Equipments.Hand = fun(items.Equipments.Hand, parameter)
-	items.Equipments.Head = fun(items.Equipments.Head, parameter)
-	items.Equipments.Legs = fun(items.Equipments.Legs, parameter)
-	items.Equipments.Neck = fun(items.Equipments.Neck, parameter)
-	items.Equipments.Shoulder = fun(items.Equipments.Shoulder, parameter)
-	items.Equipments.FirstWeapon = fun(items.Equipments.FirstWeapon, parameter)
-	items.Equipments.SecondWeapon = fun(items.Equipments.SecondWeapon, parameter)
-	items.Mounts = fun(items.Mounts, parameter)
-	items.Pets = fun(items.Pets, parameter)
+func iterateOnWearableEquipment(items customTypes.WearableItems, fn func([]customTypes.CustomItem, any) []customTypes.CustomItem, parameter any) customTypes.WearableItems {
+	items.Equipments.Accessory = fn(items.Equipments.Accessory, parameter)
+	items.Equipments.Back = fn(items.Equipments.Back, parameter)
+	items.Equipments.Belt = fn(items.Equipments.Belt, parameter)
+	items.Equipments.Chest = fn(items.Equipments.Chest, parameter)
+	items.Equipments.Hand = fn(items.Equipments.Hand, parameter)
+	items.Equipments.Head = fn(items.Equipments.Head, parameter)
+	items.Equipments.Legs = fn(items.Equipments.Legs, parameter)
+	items.Equipments.Neck = fn(items.Equipments.Neck, parameter)
+	items.Equipments.Shoulder = fn(items.Equipments.Shoulder, parameter)
+	items.Equipments.FirstWeapon = fn(items.Equipments.FirstWeapon, parameter)
+	items.Equipments.SecondWeapon = fn(items.Equipments.SecondWeapon, parameter)
+	items.Mounts = fn(items.Mounts, parameter)
+	items.Pets = fn(items.Pets, parameter)
 	return items
 }
 
+func iterateOnWearableEquipmentTwoReturn(items customTypes.WearableItems, fn func([]customTypes.CustomItem, any) ([]customTypes.CustomItem, []customTypes.CustomItem), parameter any) (customTypes.WearableItems, customTypes.WearableItems) {
+	secondReturn := customTypes.WearableItems{}
+	items.Equipments.Accessory, secondReturn.Equipments.Accessory = fn(items.Equipments.Accessory, parameter)
+	items.Equipments.Back, secondReturn.Equipments.Back = fn(items.Equipments.Back, parameter)
+	items.Equipments.Belt, secondReturn.Equipments.Belt = fn(items.Equipments.Belt, parameter)
+	items.Equipments.Chest, secondReturn.Equipments.Chest = fn(items.Equipments.Chest, parameter)
+	items.Equipments.Hand, secondReturn.Equipments.Hand = fn(items.Equipments.Hand, parameter)
+	items.Equipments.Head, secondReturn.Equipments.Head = fn(items.Equipments.Head, parameter)
+	items.Equipments.Legs, secondReturn.Equipments.Legs = fn(items.Equipments.Legs, parameter)
+	items.Equipments.Neck, secondReturn.Equipments.Neck = fn(items.Equipments.Neck, parameter)
+	items.Equipments.Shoulder, secondReturn.Equipments.Shoulder = fn(items.Equipments.Shoulder, parameter)
+	items.Equipments.FirstWeapon, secondReturn.Equipments.FirstWeapon = fn(items.Equipments.FirstWeapon, parameter)
+	items.Equipments.SecondWeapon, secondReturn.Equipments.SecondWeapon = fn(items.Equipments.SecondWeapon, parameter)
+	items.Mounts, secondReturn.Mounts = fn(items.Mounts, parameter)
+	items.Pets, secondReturn.Pets = fn(items.Pets, parameter)
+	return items, secondReturn
+}
+
 func RemoveTooHighLevelItems(items customTypes.WearableItems, level int) customTypes.WearableItems {
-	items.Equipments.Accessory = removeTooHighLevelItemsFromList(items.Equipments.Accessory, level)
-	items.Equipments.Back = removeTooHighLevelItemsFromList(items.Equipments.Back, level)
-	items.Equipments.Belt = removeTooHighLevelItemsFromList(items.Equipments.Belt, level)
-	items.Equipments.Chest = removeTooHighLevelItemsFromList(items.Equipments.Chest, level)
-	items.Equipments.Hand = removeTooHighLevelItemsFromList(items.Equipments.Hand, level)
-	items.Equipments.Head = removeTooHighLevelItemsFromList(items.Equipments.Head, level)
-	items.Equipments.Legs = removeTooHighLevelItemsFromList(items.Equipments.Legs, level)
-	items.Equipments.Neck = removeTooHighLevelItemsFromList(items.Equipments.Neck, level)
-	items.Equipments.Shoulder = removeTooHighLevelItemsFromList(items.Equipments.Shoulder, level)
-	items.Equipments.FirstWeapon = removeTooHighLevelItemsFromList(items.Equipments.FirstWeapon, level)
-	items.Equipments.SecondWeapon = removeTooHighLevelItemsFromList(items.Equipments.SecondWeapon, level)
-	items.Mounts = removeTooHighLevelItemsFromList(items.Mounts, level)
-	items.Pets = removeTooHighLevelItemsFromList(items.Pets, level)
+	items = iterateOnWearableEquipment(items, func(ci []customTypes.CustomItem, a any) []customTypes.CustomItem {
+		return removeTooHighLevelItemsFromList(ci, level)
+	}, level)
 	return items
 }
 
@@ -90,30 +118,17 @@ func removeTooHighLevelItemsFromList(itemList []customTypes.CustomItem, level in
 	return resList
 }
 
-func getAndRemoveRelicItems(itemList []customTypes.CustomItem) ([]customTypes.CustomItem, []customTypes.CustomItem) {
+func getAndRemoveRarityItems(itemList []customTypes.CustomItem, rarity int) ([]customTypes.CustomItem, []customTypes.CustomItem) {
 	resList := []customTypes.CustomItem{}
-	relicList := []customTypes.CustomItem{}
+	rarityItemList := []customTypes.CustomItem{}
 	for _, item := range itemList {
-		if item.Rarity == types.Rarity.Relic {
-			relicList = append(relicList, item)
+		if item.Rarity == rarity {
+			rarityItemList = append(rarityItemList, item)
 		} else {
 			resList = append(resList, item)
 		}
 	}
-	return resList, relicList
-}
-
-func getAndRemoveEpicItems(itemList []customTypes.CustomItem) ([]customTypes.CustomItem, []customTypes.CustomItem) {
-	resList := []customTypes.CustomItem{}
-	epicList := []customTypes.CustomItem{}
-	for _, item := range itemList {
-		if item.Rarity == types.Rarity.Epic {
-			epicList = append(epicList, item)
-		} else {
-			resList = append(resList, item)
-		}
-	}
-	return resList, epicList
+	return resList, rarityItemList
 }
 
 func CalculateBuildHeuristic(build buildTypes.Build, request types.RequestRanking) float64 {
@@ -132,29 +147,34 @@ func GetBetterHeuristicItems(request types.RequestRanking, itemList []customType
 	sort.SliceStable(loopItemList, func(i, j int) bool {
 		return loopItemList[i].Heuristic > loopItemList[j].Heuristic
 	})
-	if len(loopItemList) < itemNumber {
+	if itemNumber > len(loopItemList) {
 		itemNumber = len(loopItemList)
 	}
 	itemList = []customTypes.CustomItem{}
 	if len(loopItemList) > 0 {
-		if loopItemList[0].Item.EquipmentPosition.Position != nil &&
+		if len(loopItemList[0].Item.EquipmentPosition.Position) > 0 &&
 			loopItemList[0].Item.EquipmentPosition.Position[0] == "FIRST_WEAPON" {
-			for i := 0; i < itemNumber/2; i++ { // Add One handed weapons
-				if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) == 0 {
-					itemList = append(itemList, loopItemList[i].Item)
-				}
-			}
-			for i := 0; i < itemNumber/2; i++ { // Add Two handed weapons
-				if len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) > 0 &&
+			oneHand := []customTypes.CustomItem{}
+			twoHand := []customTypes.CustomItem{}
+			for i := 0; i < len(loopItemList); i++ {
+				if len(oneHand) < itemNumber/2 &&
+					len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) == 0 {
+					oneHand = append(oneHand, loopItemList[i].Item)
+				} else if len(twoHand) < itemNumber/2 &&
+					len(loopItemList[i].Item.EquipmentPosition.PositionDisabled) > 0 &&
 					loopItemList[i].Item.EquipmentPosition.PositionDisabled[0] == "SECOND_WEAPON" {
-					itemList = append(itemList, loopItemList[i].Item)
+					twoHand = append(twoHand, loopItemList[i].Item)
 				}
 			}
+			itemList = append(itemList, oneHand...)
+			itemList = append(itemList, twoHand...)
 		} else {
 			for i := 0; i < itemNumber; i++ {
 				itemList = append(itemList, loopItemList[i].Item)
 			}
 		}
+	} else {
+		return nil
 	}
 	return itemList
 }
@@ -162,9 +182,6 @@ func GetBetterHeuristicItems(request types.RequestRanking, itemList []customType
 func calculateHeuristicForBetterItem(item customTypes.CustomItem, request types.RequestRanking) float64 {
 	heuristicSum := float64(0)
 	for _, effect := range item.EquipEffects {
-		if item.Title.En == "Valkyr Helmet" {
-			log.Println(effect.Description.En, calculateEffectHeuristic(effect, request))
-		}
 		heuristicSum += calculateEffectHeuristic(effect, request)
 	}
 	return heuristicSum
@@ -516,7 +533,7 @@ func elemMaitriseNameToActionId(elemMaitriseName string) int {
 	case "Air":
 		return 125
 	default:
-		log.Println("Elem mastery name not found")
+		// log.Println("Elem mastery name not found")
 		return 0
 	}
 }
@@ -532,7 +549,7 @@ func elemResiNameToActionId(elemMaitriseName string) int {
 	case "Air":
 		return 85
 	default:
-		log.Println("Elem mastery name not found")
+		// log.Println("Elem mastery name not found")
 		return 0
 	}
 }

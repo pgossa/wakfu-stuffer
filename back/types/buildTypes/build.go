@@ -19,6 +19,46 @@ type Build struct {
 	Pet          customTypes.CustomItem
 }
 
+func (build Build) NewBuildChangeItemByPosition(customItem customTypes.CustomItem, position string) Build {
+	newBuild := build
+	switch position {
+	case "HEAD":
+		newBuild.Helmet = customItem
+	case "NECK":
+		newBuild.Amulet = customItem
+	case "CHEST":
+		newBuild.BreastPlate = customItem
+	case "LEFT_HAND":
+		newBuild.LeftHand = customItem
+		if len(customItem.EquipmentPosition.PositionDisabled) > 0 {
+			newBuild.RightHand = customTypes.CustomItem{}
+		}
+	case "RIGHT_HAND":
+		if len(newBuild.FirstWeapon.EquipmentPosition.PositionDisabled) == 0 {
+			newBuild.RightHand = customItem
+		}
+	case "BOOTS":
+		newBuild.Boots = customItem
+	case "BACK":
+		newBuild.Cloak = customItem
+	case "SHOULDERS":
+		newBuild.Epaulettes = customItem
+	case "BELT":
+		newBuild.Belt = customItem
+	case "MOUNT":
+		newBuild.Mount = customItem
+	case "FIRST_WEAPON":
+		newBuild.FirstWeapon = customItem
+	case "SECOND_WEAPON":
+		newBuild.SecondWeapon = customItem
+	case "ACCESSORY":
+		newBuild.Accessory = customItem
+	case "PET":
+		newBuild.Pet = customItem
+	}
+	return newBuild
+}
+
 func (build Build) GetBuildItem() []customTypes.CustomItem {
 	resList := []customTypes.CustomItem{}
 	resList = append(resList, build.Helmet)
@@ -36,4 +76,23 @@ func (build Build) GetBuildItem() []customTypes.CustomItem {
 	resList = append(resList, build.Accessory)
 	resList = append(resList, build.Pet)
 	return resList
+}
+
+func (build Build) ToString() string {
+	resString := ""
+	resString += build.Helmet.ToString() + " "
+	resString += build.Amulet.ToString() + " "
+	resString += build.BreastPlate.ToString() + " "
+	resString += build.LeftHand.ToString() + " "
+	resString += build.RightHand.ToString() + " "
+	resString += build.Boots.ToString() + " "
+	resString += build.Cloak.ToString() + " "
+	resString += build.Epaulettes.ToString() + " "
+	resString += build.Belt.ToString() + " "
+	resString += build.FirstWeapon.ToString() + " "
+	resString += build.SecondWeapon.ToString() + " "
+	resString += build.Accessory.ToString() + " "
+	resString += build.Pet.ToString() + " "
+	resString += build.Mount.ToString()
+	return resString
 }
