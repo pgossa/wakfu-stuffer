@@ -88,13 +88,13 @@ export default class buildUtils {
     for (const stat of stats) {
       switch (stat) {
         case 'Action Point':
-          request.weightSpec.APWeight = 1
+          request.weightSpec.APWeight = 1000
           break
         case 'Movement Point':
-          request.weightSpec.MPWeight = 1
+          request.weightSpec.MPWeight = 900
           break
         case 'Wakfu Point':
-          request.weightSpec.WPWeight = 1
+          request.weightSpec.WPWeight = 600
           break
         case 'Elemental masteries':
           request.weightSpec.ElementaryDamages = {
@@ -109,20 +109,20 @@ export default class buildUtils {
           }
           break
         case 'Melee masteries':
-          request.weightSpec.MMeleeWeight = 1
+          request.weightSpec.MMeleeWeight = 3
           break
         case 'Distance masteries':
-          request.weightSpec.MDistanceWeight = 1
+          request.weightSpec.MDistanceWeight = 3
           break
         case 'Rear masteries':
-          request.weightSpec.RBackWeight = 1
+          request.weightSpec.RBackWeight = 3
           break
         case 'Critical':
-          request.weightSpec.CriticalChanceWeight = 1
-          request.weightSpec.MCriticalWeight = 1
+          request.weightSpec.CriticalChanceWeight = 200
+          request.weightSpec.MCriticalWeight = 3
           break
         case 'Heal masteries':
-          request.weightSpec.MHealWeight = 1
+          request.weightSpec.MHealWeight = 3
           break
         case 'Health Points':
           request.weightSpec.HPWeight = 1
@@ -140,22 +140,22 @@ export default class buildUtils {
           }
           break
         case 'Block':
-          request.weightSpec.BlockWeight = 1
+          request.weightSpec.BlockWeight = 200
           break
         case 'Dodge':
-          request.weightSpec.DodgeWeight = 1
+          request.weightSpec.DodgeWeight = 2
           break
         case 'Lock':
-          request.weightSpec.LockWeight = 1
+          request.weightSpec.LockWeight = 2
           break
         case 'Initiative':
-          request.weightSpec.InitiativeWeight = 1
+          request.weightSpec.InitiativeWeight = 2
           break
         case 'Range':
-          request.weightSpec.POWeight = 1
+          request.weightSpec.POWeight = 600
           break
         case 'Control':
-          request.weightSpec.ControlWeight = 1
+          request.weightSpec.ControlWeight = 400
           break
       }
     }

@@ -118,6 +118,23 @@ func removeTooHighLevelItemsFromList(itemList []customTypes.CustomItem, level in
 	return resList
 }
 
+func RemoveItemByNames(items customTypes.WearableItems, names []string) customTypes.WearableItems {
+	items = iterateOnWearableEquipment(items, func(ci []customTypes.CustomItem, a any) []customTypes.CustomItem {
+		return removeItemsFromListByName(ci, names)
+	}, names)
+	return items
+}
+
+func removeItemsFromListByName(itemList []customTypes.CustomItem, names []string) []customTypes.CustomItem {
+	resList := []customTypes.CustomItem{}
+	for _, item := range itemList {
+		if !slices.Contains(names, item.Title.En) {
+			resList = append(resList, item)
+		}
+	}
+	return resList
+}
+
 func getAndRemoveRarityItems(itemList []customTypes.CustomItem, rarity int) ([]customTypes.CustomItem, []customTypes.CustomItem) {
 	resList := []customTypes.CustomItem{}
 	rarityItemList := []customTypes.CustomItem{}
@@ -142,6 +159,9 @@ func CalculateBuildHeuristic(build buildTypes.Build, request types.RequestRankin
 func GetBetterHeuristicItems(request types.RequestRanking, itemList []customTypes.CustomItem, itemNumber int) []customTypes.CustomItem {
 	loopItemList := []ItemHeuristic{}
 	for _, item := range itemList {
+		if slices.Contains(request.MandatoryItems, item.Title.En) {
+			return []customTypes.CustomItem{item}
+		}
 		loopItemList = append(loopItemList, ItemHeuristic{Item: item, Heuristic: calculateHeuristicForBetterItem(item, request)})
 	}
 	sort.SliceStable(loopItemList, func(i, j int) bool {
