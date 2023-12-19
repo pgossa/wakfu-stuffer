@@ -10,7 +10,7 @@ import (
 	"github.com/pgossa/wakfu-stuffer/types"
 )
 
-func GetBuildByWeight(c *gin.Context) (any, error) {
+func GetQuickBuild(c *gin.Context) (any, error) {
 	jsonData, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Println(err)
@@ -23,6 +23,6 @@ func GetBuildByWeight(c *gin.Context) (any, error) {
 		return "", err
 	}
 	// return requestRanking, nil
-	build := ranking.WeightRankBuild(requestRanking)
+	build := ranking.QuickRankBuild(requestRanking)
 	return build, nil
 }

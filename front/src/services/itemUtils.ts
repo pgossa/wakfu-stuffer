@@ -125,7 +125,7 @@ export default class itemUtils {
       case 120: // Me
         return me
       case 400:
-        return null
+        return ''
       default:
         console.log(effect.ActionId)
         return 'https://vertylo.github.io/wakassets/aptitudes/1.png'

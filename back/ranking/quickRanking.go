@@ -6,7 +6,7 @@ import (
 	"github.com/pgossa/wakfu-stuffer/types"
 	"github.com/pgossa/wakfu-stuffer/types/buildTypes"
 	"github.com/pgossa/wakfu-stuffer/types/customTypes"
-	"github.com/pgossa/wakfu-stuffer/utils"
+	"github.com/pgossa/wakfu-stuffer/utils/rankingUtils"
 )
 
 // The idea for this algorithm is to take the top 10 non relic or epic items for each equipement position
@@ -14,14 +14,14 @@ import (
 // And finally to try every possible combination
 // There might be an issue with low number specs (such as AP, MP, ...)
 
-func WeightRankBuild(request types.RequestRanking) buildTypes.Build {
+func QuickRankBuild(request types.RequestRanking) buildTypes.Build {
 	itemList := customTypes.WearableItemsData
-	itemList = utils.RemoveTooHighLevelItems(itemList, request.Level)
+	itemList = rankingUtils.RemoveTooHighLevelItems(itemList, request.Level)
 	log.Println(itemList.Len())
-	itemList = utils.RemoveForbiddenItemByRarity(itemList, request.Rarity)
+	itemList = rankingUtils.RemoveForbiddenItemByRarity(itemList, request.Rarity)
 	log.Println(itemList.Len())
-	itemList = utils.RemoveItemByNames(itemList, request.ForbiddenItems)
-	itemList, relicItemList, epicItemList := utils.GetBetterAndRemoveRelicAndEpicItems(request, itemList)
+	itemList = rankingUtils.RemoveItemByNames(itemList, request.ForbiddenItems)
+	itemList, relicItemList, epicItemList := rankingUtils.GetBetterAndRemoveRelicAndEpicItems(request, itemList)
 	relicItemList = getBetterWeightItemsForPositions(request, relicItemList)
 	epicItemList = getBetterWeightItemsForPositions(request, epicItemList)
 	doNotCrash(relicItemList)
@@ -36,19 +36,19 @@ func doNotCrash(lol customTypes.WearableItems) {
 }
 
 func getBetterWeightItemsForPositions(request types.RequestRanking, itemList customTypes.WearableItems) customTypes.WearableItems {
-	itemList.Equipments.Head = utils.GetBetterHeuristicItems(request, itemList.Equipments.Head, 1)
-	itemList.Equipments.Shoulder = utils.GetBetterHeuristicItems(request, itemList.Equipments.Shoulder, 1)
-	itemList.Equipments.Neck = utils.GetBetterHeuristicItems(request, itemList.Equipments.Neck, 1)
-	itemList.Equipments.Back = utils.GetBetterHeuristicItems(request, itemList.Equipments.Back, 1)
-	itemList.Equipments.Chest = utils.GetBetterHeuristicItems(request, itemList.Equipments.Chest, 1)
-	itemList.Equipments.Hand = utils.GetBetterHeuristicItems(request, itemList.Equipments.Hand, 2) // Need at least 2 rings
-	itemList.Equipments.Belt = utils.GetBetterHeuristicItems(request, itemList.Equipments.Belt, 1)
-	itemList.Equipments.Legs = utils.GetBetterHeuristicItems(request, itemList.Equipments.Legs, 1)
-	itemList.Equipments.Accessory = utils.GetBetterHeuristicItems(request, itemList.Equipments.Accessory, 1)
-	itemList.Equipments.FirstWeapon = utils.GetBetterHeuristicItems(request, itemList.Equipments.FirstWeapon, 2) // Need at least 1 1-handed and 1 2-handed
-	itemList.Equipments.SecondWeapon = utils.GetBetterHeuristicItems(request, itemList.Equipments.SecondWeapon, 1)
-	itemList.Mounts = utils.GetBetterHeuristicItems(request, itemList.Mounts, 1) // Does not make sense to test with more mounts
-	itemList.Pets = utils.GetBetterHeuristicItems(request, itemList.Pets, 1)     // Does not make sense to test with more pets
+	itemList.Equipments.Head = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Head, 1)
+	itemList.Equipments.Shoulder = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Shoulder, 1)
+	itemList.Equipments.Neck = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Neck, 1)
+	itemList.Equipments.Back = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Back, 1)
+	itemList.Equipments.Chest = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Chest, 1)
+	itemList.Equipments.Hand = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Hand, 2) // Need at least 2 rings
+	itemList.Equipments.Belt = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Belt, 1)
+	itemList.Equipments.Legs = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Legs, 1)
+	itemList.Equipments.Accessory = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.Accessory, 1)
+	itemList.Equipments.FirstWeapon = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.FirstWeapon, 2) // Need at least 1 1-handed and 1 2-handed
+	itemList.Equipments.SecondWeapon = rankingUtils.GetBetterHeuristicItems(request, itemList.Equipments.SecondWeapon, 1)
+	itemList.Mounts = rankingUtils.GetBetterHeuristicItems(request, itemList.Mounts, 1) // Does not make sense to test with more mounts
+	itemList.Pets = rankingUtils.GetBetterHeuristicItems(request, itemList.Pets, 1)     // Does not make sense to test with more pets
 	return itemList
 }
 
@@ -110,17 +110,15 @@ func getBetterCombinationWithRelicAndEpic(request types.RequestRanking, itemList
 			}
 		}
 		counter++
-		loopHeuristic = utils.CalculateBuildHeuristic(loopBuild, request)
+		loopHeuristic = rankingUtils.CalculateBuildHeuristic(loopBuild, request)
 		if maxHeuristic <= loopHeuristic {
 			maxHeuristic = loopHeuristic
 			basicBuild = loopBuild
 		}
 	}
 
-	log.Println("SOUCE")
-	log.Println(basicBuild.ToString())
 	// TODO: Much better way to do this
-	// TODO: Also mandatory items get overwritten by epic / relic (ref: utils/build.go:162)
+	// TODO: Also mandatory items get overwritten by epic / relic (ref: rankingUtils/build.go:162)
 	//
 	if len(relicItemList.GetAll()) <= 0 && len(epicItemList.GetAll()) <= 0 {
 		return basicBuild
@@ -131,7 +129,7 @@ func getBetterCombinationWithRelicAndEpic(request types.RequestRanking, itemList
 			fullBuild := buildTypes.Build{}
 			fullBuild = basicBuild.NewBuildChangeItemByPosition(loopEpic, loopEpic.EquipmentPosition.Position[0])
 			counter++
-			loopHeuristic = utils.CalculateBuildHeuristic(fullBuild, request)
+			loopHeuristic = rankingUtils.CalculateBuildHeuristic(fullBuild, request)
 			if maxHeuristic <= loopHeuristic {
 				maxHeuristic = loopHeuristic
 				bestBuild = fullBuild
@@ -144,7 +142,7 @@ func getBetterCombinationWithRelicAndEpic(request types.RequestRanking, itemList
 			fullBuild := buildTypes.Build{}
 			fullBuild = basicBuild.NewBuildChangeItemByPosition(loopRelic, loopRelic.EquipmentPosition.Position[0])
 			counter++
-			loopHeuristic = utils.CalculateBuildHeuristic(fullBuild, request)
+			loopHeuristic = rankingUtils.CalculateBuildHeuristic(fullBuild, request)
 			if maxHeuristic <= loopHeuristic {
 				maxHeuristic = loopHeuristic
 				bestBuild = fullBuild
@@ -166,7 +164,7 @@ func getBetterCombinationWithRelicAndEpic(request types.RequestRanking, itemList
 				fullBuild = relicBuild.NewBuildChangeItemByPosition(loopEpic, loopEpic.EquipmentPosition.Position[0])
 			}
 			counter++
-			loopHeuristic = utils.CalculateBuildHeuristic(fullBuild, request)
+			loopHeuristic = rankingUtils.CalculateBuildHeuristic(fullBuild, request)
 			if maxHeuristic <= loopHeuristic {
 				maxHeuristic = loopHeuristic
 				bestBuild = fullBuild
@@ -205,7 +203,7 @@ func tryEveryCombinationWithWeight(request types.RequestRanking, itemList custom
 							Mount:        itemList.Mounts[0],
 							Pet:          itemList.Pets[0],
 						}
-						buildHeuristic := utils.CalculateBuildHeuristic(build, request)
+						buildHeuristic := rankingUtils.CalculateBuildHeuristic(build, request)
 						if buildHeuristic >= maxHeuristic {
 							maxHeuristic = buildHeuristic
 							bestBuild = build
@@ -228,7 +226,7 @@ func tryEveryCombinationWithWeight(request types.RequestRanking, itemList custom
 						Mount:        itemList.Mounts[0],
 						Pet:          itemList.Pets[0],
 					}
-					buildHeuristic := utils.CalculateBuildHeuristic(build, request)
+					buildHeuristic := rankingUtils.CalculateBuildHeuristic(build, request)
 					if buildHeuristic > maxHeuristic {
 						maxHeuristic = buildHeuristic
 						bestBuild = build

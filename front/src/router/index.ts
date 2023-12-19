@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import BasicView from '../views/BasicView.vue'
-import WeightView from '../views/WeightView.vue'
+import QuickView from '../views/QuickView.vue'
+import CustomView from '../views/CustomView.vue'
 import AdvancedView from '../views/AdvancedView.vue'
 import DisplayView from '@/views/DisplayView.vue'
 
@@ -14,14 +14,14 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/basic',
-      name: 'basic',
-      component: BasicView
+      path: '/quick',
+      name: 'quick',
+      component: QuickView
     },
     {
-      path: '/weight',
-      name: 'weight',
-      component: WeightView
+      path: '/custom',
+      name: 'custom',
+      component: CustomView
     },
     {
       path: '/advanced',
@@ -32,7 +32,7 @@ const router = createRouter({
       path: '/display',
       name: 'display',
       component: DisplayView
-    },
+    }
   ]
 })
 

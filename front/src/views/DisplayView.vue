@@ -1,11 +1,19 @@
 <script setup lang="ts">
+import router from '@/router'
+import { onBeforeMount } from 'vue'
 import type { Build } from '@/types/buildType'
 import { useBuildStore } from '@/stores/build'
-import { FwbSpinner } from 'flowbite-vue'
 import ItemDisplay from '../components/ItemDisplay.vue'
+import HomeView from './HomeView.vue'
 
 const buildStore = useBuildStore()
 const build: Build = buildStore.getBuild
+
+onBeforeMount(() => {
+  if (build.Mount === undefined) {
+    router.push({ path: '/', name: 'home', component: HomeView })
+  }
+})
 </script>
 
 <template>
